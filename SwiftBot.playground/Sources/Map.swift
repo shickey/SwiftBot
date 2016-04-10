@@ -71,8 +71,7 @@ public class Map {
             y = Int(arc4random_uniform(UInt32(size.height)))
             tile = tiles[y][x]
         }
-        robot.location.x = x
-        robot.location.y = y
+        move(Point(x, y))
     }
     
     func clear() {
@@ -90,7 +89,7 @@ public class Map {
         return tiles[location.y][location.x]
     }
     
-    func move(direction: Direction) {
+    func move(direction: Direction) -> Bool {
         var movePosition = robot.location
         switch direction {
         case .North:
@@ -102,17 +101,18 @@ public class Map {
         case .South:
             movePosition.y += 1
         }
-        move(movePosition)
+        return move(movePosition)
     }
     
-    func move(location: Point) {
+    func move(location: Point) -> Bool {
         let nextTile = tileAtLocation(location)
         if nextTile == .Wall {
             print("ERROR: There's a wall there!")
-            return
+            return false
         }
         robot.location = location
         tiles[robot.location.y][robot.location.x] = .Explored
+        return true
     }
     
 }

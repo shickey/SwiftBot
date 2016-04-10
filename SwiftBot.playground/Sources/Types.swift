@@ -1,5 +1,9 @@
 import Foundation
 
+/*
+*  Geometry
+*/
+
 struct Point {
     var x = 0
     var y = 0
@@ -19,6 +23,10 @@ public struct Size {
         height = newHeight
     }
 }
+
+/*
+*  Map
+*/
 
 enum MapTile : Character, Equatable {
     case Wall = "W"
