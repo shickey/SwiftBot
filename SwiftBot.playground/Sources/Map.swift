@@ -61,6 +61,13 @@ public class Map {
         randomlyPlaceRobot()
     }
     
+    func copy() -> Map {
+        var c = Map(size: size)
+        c.tiles = tiles
+        c.robot = robot
+        return c
+    }
+    
     func randomlyPlaceRobot() {
         clear()
         var x = Int(arc4random_uniform(UInt32(size.width)))
@@ -105,13 +112,35 @@ public class Map {
     }
     
     func move(location: Point) -> Bool {
-        let nextTile = tileAtLocation(location)
-        if nextTile == .Wall {
+        if !canMove(location) {
             print("ERROR: There's a wall there!")
             return false
         }
         robot.location = location
         tiles[robot.location.y][robot.location.x] = .Explored
+        return true
+    }
+    
+    func canMove(direction: Direction) -> Bool {
+        var movePosition = robot.location
+        switch direction {
+        case .North:
+            movePosition.y -= 1
+        case .East:
+            movePosition.x += 1
+        case .West:
+            movePosition.x -= 1
+        case .South:
+            movePosition.y += 1
+        }
+        return canMove(movePosition)
+    }
+    
+    func canMove(location: Point) -> Bool {
+        let tile = tileAtLocation(location)
+        if tile == .Wall {
+            return false
+        }
         return true
     }
     

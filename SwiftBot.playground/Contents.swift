@@ -3,15 +3,13 @@ import XCPlayground
 
 setup()
 
-rules = {
+instructions = {
     
-    for _ in 0..<10 {
+    while canGoNorth() {
         goNorth()
     }
     
 }
 
-run(completion: {XCPlaygroundPage.currentPage.finishExecution()})
-
-
+run({XCPlaygroundPage.currentPage.finishExecution()})
 

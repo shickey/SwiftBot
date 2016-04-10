@@ -17,65 +17,74 @@ public var view : RobotView = ({
 })()
 
 let errorFunc = {
-    print("Whoa! You can't robot instructions outside of the rules section!")
+    print("Whoa! You can't use robot instructions outside of the rules section!")
 }
 
+public var canGoNorth : () -> Bool = { return false }
 public var goNorth : () -> () = errorFunc
 public var goWest  : () -> () = errorFunc
 
-public var rules : () -> () = {}
+public var instructions : () -> () = {}
 
-public func run(afterEach: () -> () = {}, completion: () -> () = {} ) {
+public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
+    
+    var mapCopy = currentMap.copy()
+    var encounteredError = false
+    var moves : [() -> ()] = []
+    
+    canGoNorth = {
+        if encounteredError { return false }
+        return mapCopy.canMove(.North)
+    }
+    
+    goNorth = {
+        if encounteredError { return }
+        let success = mapCopy.move(.North)
+        if success {
+            moves.append({
+                currentMap.move(.North)
+            })
+        }
+        else {
+            encounteredError = true
+            return
+        }
+    }
+    
+    defer {
+        canGoNorth = { return false }
+        goNorth = errorFunc
+    }
+    
+    instructions()
     
     let queue = dispatch_queue_create("instructionsQueue", DISPATCH_QUEUE_SERIAL)
-    var canceled = false
     
-    func dispatchFailableBlock(block: () -> Bool) {
+    for clo in moves {
         let block = {
-            if canceled { return }
-            let success = block()
-            if !success {
-                canceled = true
+            clo()
+            dispatch_sync(dispatch_get_main_queue(), {
+                view.setNeedsDisplay()
+            })
+            if let afterEachBlock = afterEach {
+                dispatch_sync(dispatch_get_main_queue(), afterEachBlock)
             }
         }
         dispatch_async(queue, block)
         dispatch_async(queue, {
-            if canceled { return }
-            dispatch_sync(dispatch_get_main_queue(), {
-                view.setNeedsDisplay()
-            })
-            afterEach()
-        })
-        dispatch_async(queue, {
-            if canceled { return }
             NSThread.sleepForTimeInterval(0.1)
         })
     }
     
-    goNorth = {
-        dispatchFailableBlock({
-            return currentMap.move(.North)
+    if let completionBlock = completion {
+        dispatch_async(queue, {
+            dispatch_sync(dispatch_get_main_queue(), completionBlock)
         })
     }
     
-    goWest = {
-        dispatchFailableBlock({
-            return currentMap.move(.West)
-        })
-    }
-    
-    defer {
-        goNorth = errorFunc
-        goWest  = errorFunc
-    }
-    
-    rules()
-    
-    dispatch_async(queue, completion)
     
 }
 
 public func setup() {
-    XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
     XCPlaygroundPage.currentPage.liveView = view
 }
