@@ -1,4 +1,5 @@
-import Foundation
+import UIKit
+import XCPlayground
 import Dispatch
 
 var maps : [Map] = ({
@@ -9,33 +10,72 @@ var maps : [Map] = ({
 
 public var currentMap = maps[0]
 
+public var view : RobotView = ({
+    let view = RobotView(frame: CGRectMake(0, 0, 300.0, 300.0))
+    view.map = currentMap
+    return view
+})()
+
 let errorFunc = {
     print("Whoa! You can't robot instructions outside of the rules section!")
 }
 
 public var goNorth : () -> () = errorFunc
+public var goWest  : () -> () = errorFunc
 
 public var rules : () -> () = {}
 
-public func run(completion: (() -> ()) = {} ) {
+public func run(afterEach: () -> () = {}, completion: () -> () = {} ) {
     
     let queue = dispatch_queue_create("instructionsQueue", DISPATCH_QUEUE_SERIAL)
     var canceled = false
     
-    goNorth = {
+    func dispatchFailableBlock(block: () -> Bool) {
         let block = {
             if canceled { return }
-            let success = currentMap.move(.North)
+            let success = block()
             if !success {
                 canceled = true
             }
         }
         dispatch_async(queue, block)
+        dispatch_async(queue, {
+            if canceled { return }
+            dispatch_sync(dispatch_get_main_queue(), {
+                view.setNeedsDisplay()
+            })
+            afterEach()
+        })
+        dispatch_async(queue, {
+            if canceled { return }
+            NSThread.sleepForTimeInterval(0.1)
+        })
+    }
+    
+    goNorth = {
+        dispatchFailableBlock({
+            return currentMap.move(.North)
+        })
+    }
+    
+    goWest = {
+        dispatchFailableBlock({
+            return currentMap.move(.West)
+        })
+    }
+    
+    defer {
+        goNorth = errorFunc
+        goWest  = errorFunc
     }
     
     rules()
     
     dispatch_async(queue, completion)
     
-    goNorth = errorFunc
+}
+
+public func setup() {
+    XCPlaygroundPage.currentPage.needsIndefiniteExecution = true
+    XCPlaygroundPage.currentPage.liveView = view
 }
