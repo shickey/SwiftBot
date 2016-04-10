@@ -1,53 +1,11 @@
 import UIKit
 
-public struct Point {
-    var x = 0
-    var y = 0
-    
-    public init(_ newX: Int, _ newY: Int) {
-        x = newX
-        y = newY
-    }
-}
-
-public struct Size {
-    var width = 0
-    var height = 0
-    
-    public init(_ newWidth: Int, _ newHeight: Int) {
-        width = newWidth
-        height = newHeight
-    }
-}
-
-public enum MapTile : Character, Equatable {
-    case Wall = "W"
-    case Space = " "
-    case Explored = "E"
-}
-
-public func ==(lhs: MapTile, rhs: MapTile) -> Bool {
-    return lhs.rawValue == rhs.rawValue
-}
-
-public enum Direction {
-    case North
-    case East
-    case West
-    case South
-}
-
-public struct Robot {
-    var location : Point = Point(0,0)
-    var state : Int = 0
-}
-
 public class Map {
     
     var tiles : [[MapTile]] = []
     var robot = Robot()
     
-    public var size : Size {
+    var size : Size {
         get {
             return Size(tiles[0].count, tiles.count)
         }
@@ -94,7 +52,7 @@ public class Map {
             for line in lines {
                 var tileLine : [MapTile] = []
                 for char in line.characters {
-                    tileLine.append(MapTile.init(rawValue: char)!)
+                    tileLine.append(MapTile(rawValue: char)!)
                 }
                 tiles.append(tileLine)
             }
@@ -103,7 +61,7 @@ public class Map {
         randomlyPlaceRobot()
     }
     
-    public func randomlyPlaceRobot() {
+    func randomlyPlaceRobot() {
         clear()
         var x = Int(arc4random_uniform(UInt32(size.width)))
         var y = Int(arc4random_uniform(UInt32(size.height)))
@@ -117,7 +75,7 @@ public class Map {
         robot.location.y = y
     }
     
-    public func clear() {
+    func clear() {
         for y in 0..<size.height {
             for x in 0..<size.width {
                 let tile = tiles[y][x]
@@ -128,11 +86,11 @@ public class Map {
         }
     }
     
-    public func tileAtLocation(location: Point) -> MapTile {
+    func tileAtLocation(location: Point) -> MapTile {
         return tiles[location.y][location.x]
     }
     
-    public func move(direction: Direction) {
+    func move(direction: Direction) {
         var movePosition = robot.location
         switch direction {
         case .North:
@@ -147,7 +105,7 @@ public class Map {
         move(movePosition)
     }
     
-    public func move(location: Point) {
+    func move(location: Point) {
         let nextTile = tileAtLocation(location)
         if nextTile == .Wall {
             print("ERROR: There's a wall there!")
@@ -185,60 +143,4 @@ extension Map : CustomStringConvertible {
             return str
         }
     }
-}
-
-public class RobotView : UIView {
-    
-    var storedMap : Map?
-    
-    public var map : Map? {
-        get {
-            return storedMap
-        }
-        set(newMap) {
-            storedMap = newMap
-            setNeedsDisplay()
-        }
-    }
-    
-    public override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        CGContextClearRect(context, rect)
-        if let map = storedMap {
-            let mapSize = map.size
-            let tileSize = computeTileSize()
-            for y in 0..<mapSize.height {
-                for x in 0..<mapSize.width {
-                    let tile = map.tiles[y][x]
-                    let origin = CGPointMake(CGFloat(x) * tileSize.width, CGFloat(y) * tileSize.height)
-                    let tileRect = CGRectMake(origin.x, origin.y, tileSize.width, tileSize.height)
-                    switch tile {
-                    case .Wall:
-                        CGContextSetRGBFillColor(context, 0, 0, 1.0, 1.0)
-                    case .Space:
-                        CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0)
-                    case .Explored:
-                        CGContextSetRGBFillColor(context, 0.5, 0.5, 0.5, 1.0)
-                    }
-                    CGContextFillRect(context, tileRect)
-                }
-            }
-            let robotOrigin = CGPointMake(CGFloat(map.robot.location.x) * tileSize.width, CGFloat(map.robot.location.y) * tileSize.height)
-            let robotRect = CGRectMake(robotOrigin.x, robotOrigin.y, tileSize.width, tileSize.height)
-            CGContextSetRGBFillColor(context, 0, 1.0, 0, 1.0)
-            CGContextFillRect(context, robotRect)
-        }
-        else {
-            super.drawRect(rect)
-        }
-    }
-    
-    func computeTileSize() -> CGSize {
-        if let mapState = storedMap {
-            let mapSize = mapState.size
-            return CGSizeMake(bounds.width / CGFloat(mapSize.width), bounds.height / CGFloat(mapSize.height))
-        }
-        return CGSizeZero
-    }
-    
 }
