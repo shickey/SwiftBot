@@ -11,7 +11,7 @@ public class Map {
         }
     }
     
-    public init(size: Size) {
+    public init(size: Size, startingLocation: Point? = nil) {
         tiles = {
             var newTiles : [[MapTile]] = []
             
@@ -42,10 +42,16 @@ public class Map {
             
             return newTiles
         }()
-        randomlyPlaceRobot()
+        
+        if let start = startingLocation {
+            move(start)
+        }
+        else {
+            randomlyPlaceRobot()
+        }
     }
     
-    public init(mapString: String) {
+    public init(mapString: String, startingLocation: Point? = nil) {
         tiles = {
             let lines = mapString.componentsSeparatedByString("\n")
             var tiles : [[MapTile]] = []
@@ -58,11 +64,16 @@ public class Map {
             }
             return tiles
         }()
-        randomlyPlaceRobot()
+        if let start = startingLocation {
+            move(start)
+        }
+        else {
+            randomlyPlaceRobot()
+        }
     }
     
     func copy() -> Map {
-        var c = Map(size: size)
+        let c = Map(size: size)
         c.tiles = tiles
         c.robot = robot
         return c
@@ -96,6 +107,10 @@ public class Map {
         return tiles[location.y][location.x]
     }
     
+    func move() -> Bool {
+        return move(robot.facing)
+    }
+    
     func move(direction: Direction) -> Bool {
         var movePosition = robot.location
         switch direction {
@@ -121,6 +136,10 @@ public class Map {
         return true
     }
     
+    func canMove() -> Bool {
+        return canMove(robot.facing)
+    }
+    
     func canMove(direction: Direction) -> Bool {
         var movePosition = robot.location
         switch direction {
@@ -140,6 +159,30 @@ public class Map {
         let tile = tileAtLocation(location)
         if tile == .Wall {
             return false
+        }
+        return true
+    }
+    
+    func turnLeft() {
+        switch robot.facing {
+        case .North:
+            robot.facing = .West
+        case .East:
+            robot.facing = .North
+        case .West:
+            robot.facing = .South
+        case .South:
+            robot.facing = .East
+        }
+    }
+    
+    func isComplete() -> Bool {
+        for row in tiles {
+            for tile in row {
+                if tile == .Space {
+                    return false
+                }
+            }
         }
         return true
     }

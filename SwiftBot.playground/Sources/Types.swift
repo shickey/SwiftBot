@@ -4,11 +4,11 @@ import Foundation
 *  Geometry
 */
 
-struct Point {
+public struct Point {
     var x = 0
     var y = 0
     
-    init(_ newX: Int, _ newY: Int) {
+    public init(_ newX: Int, _ newY: Int) {
         x = newX
         y = newY
     }
@@ -47,5 +47,5 @@ enum Direction {
 
 struct Robot {
     var location : Point = Point(0,0)
-    var state : Int = 0
+    var facing : Direction = .North
 }
