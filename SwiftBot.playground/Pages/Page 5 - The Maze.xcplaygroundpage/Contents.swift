@@ -10,7 +10,7 @@ instructions = {
 //        turnLeft()
 //        turnLeft()
 //    }
-    
+//    
 //    func canGoLeft() -> Bool {
 //        turnLeft()
 //        let can = canGoForward()

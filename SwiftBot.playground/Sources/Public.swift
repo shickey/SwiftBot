@@ -1,7 +1,7 @@
 import UIKit
 import XCPlayground
 
-let ANIMATION_INTERVAL = 0.1
+let ANIMATION_INTERVAL = 0.01
 
 var maps : [Map] = ({
     var line = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW", startingLocation: Point(1, 4))
@@ -20,13 +20,18 @@ let errorFunc = {
     print("Whoa! You can't use robot instructions outside of the rules section!")
 }
 
-public var canGoForward : () -> Bool = { return false }
-public var canGoLeft : () -> Bool = { return false }
-public var canGoRight : () -> Bool = { return false }
+let errorFuncReturningBool = { () -> Bool in
+    print("Whoa! You can't use robot instructions outside of the rules section!")
+    return false
+}
+
+public var canGoForward : () -> Bool = errorFuncReturningBool
+public var canGoLeft : () -> Bool = errorFuncReturningBool
+public var canGoRight : () -> Bool = errorFuncReturningBool
 public var goForward : () -> () = errorFunc
 public var turnLeft : () -> () = errorFunc
 public var turnRight : () -> () = errorFunc
-public var squaresLeftToExplore : () -> Bool = { return false }
+public var squaresLeftToExplore : () -> Bool = errorFuncReturningBool
 
 public var instructions : () -> () = {}
 
@@ -110,13 +115,13 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     }
     
     defer {
-        canGoForward = { return false }
-        canGoLeft = { return false }
-        canGoRight = { return false }
+        canGoForward = errorFuncReturningBool
+        canGoLeft = errorFuncReturningBool
+        canGoRight = errorFuncReturningBool
         goForward = errorFunc
         turnLeft = errorFunc
         turnRight = errorFunc
-        squaresLeftToExplore = { return false }
+        squaresLeftToExplore = errorFuncReturningBool
     }
     
     instructions()
@@ -155,8 +160,6 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
 
 public func setup(page: Int = 0) {
     currentMap = maps[page]
-    
-    print(currentMap.size)
     
     var multiplier : CGFloat = 100.0
     let mapSize = currentMap.size

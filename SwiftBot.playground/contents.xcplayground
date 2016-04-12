@@ -3,6 +3,7 @@
     <pages>
         <page name='Page 1 - goForward()'/>
         <page name='Page 2 - turnLeft()'/>
+        <page name='Page 3 - Square'/>
         <page name='Page 5 - The Maze'/>
     </pages>
 </playground>
