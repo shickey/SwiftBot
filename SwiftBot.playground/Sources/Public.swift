@@ -1,14 +1,14 @@
 import UIKit
 import XCPlayground
 
-let ANIMATION_INTERVAL = 0.25
+let ANIMATION_INTERVAL = 0.1
 
 var maps : [Map] = ({
     var line = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW", startingLocation: Point(1, 4))
-    var simple = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW", startingLocation: Point(3, 3))
-    var square = Map(size: Size(20, 20))
+    var left = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW", startingLocation: Point(3, 3))
+    var square = Map(size: Size(10, 10))
     var maze = Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW")
-    return [line, simple, square, maze]
+    return [line, left, square, maze]
 })()
 
 public var currentMap = maps[0]
@@ -21,8 +21,11 @@ let errorFunc = {
 }
 
 public var canGoForward : () -> Bool = { return false }
+public var canGoLeft : () -> Bool = { return false }
+public var canGoRight : () -> Bool = { return false }
 public var goForward : () -> () = errorFunc
 public var turnLeft : () -> () = errorFunc
+public var turnRight : () -> () = errorFunc
 public var squaresLeftToExplore : () -> Bool = { return false }
 
 public var instructions : () -> () = {}
@@ -37,6 +40,38 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     canGoForward = {
         if encounteredError { return false }
         return mapCopy.canMove()
+    }
+    
+    canGoLeft = {
+        if encounteredError { return false }
+        var left : Direction = .North
+        switch mapCopy.robot.facing {
+        case .North:
+            left = .West
+        case .East:
+            left = .North
+        case .West:
+            left = .South
+        case .South:
+            left = .East
+        }
+        return mapCopy.canMove(left)
+    }
+    
+    canGoRight = {
+        if encounteredError { return false }
+        var right : Direction = .North
+        switch mapCopy.robot.facing {
+        case .North:
+            right = .East
+        case .East:
+            right = .South
+        case .West:
+            right = .North
+        case .South:
+            right = .West
+        }
+        return mapCopy.canMove(right)
     }
     
     goForward = {
@@ -61,6 +96,14 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
         })
     }
     
+    turnRight = {
+        if encounteredError { return }
+        mapCopy.turnRight()
+        moves.append({
+            currentMap.turnRight()
+        })
+    }
+    
     squaresLeftToExplore = {
         if encounteredError { return false }
         return !mapCopy.isComplete()
@@ -68,8 +111,11 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     
     defer {
         canGoForward = { return false }
+        canGoLeft = { return false }
+        canGoRight = { return false }
         goForward = errorFunc
         turnLeft = errorFunc
+        turnRight = errorFunc
         squaresLeftToExplore = { return false }
     }
     
@@ -78,10 +124,6 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     if let nonNilCompletion = completion {
         moves.append(nonNilCompletion)
     }
-    
-    moves.append({
-        tearDown()
-    })
     
     var moveNumber = 0;
     
@@ -96,6 +138,14 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
         }
         else {
             CFRunLoopTimerInvalidate(timer)
+            
+            // TODO: This is kind of a hack-y way to make this work. Fix.
+            // Call tearDown() after a 1 second pause to give the run loop enough
+            // time to draw the final frame.
+            let tearDownTimer = CFRunLoopTimerCreateWithHandler(nil, CFAbsoluteTimeGetCurrent() + 1.0, 0, 0, 0, { _ in
+                tearDown()
+            })
+            CFRunLoopAddTimer(CFRunLoopGetCurrent(), tearDownTimer, kCFRunLoopCommonModes)
         }
     })
     
@@ -106,9 +156,12 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
 public func setup(page: Int = 0) {
     currentMap = maps[page]
     
+    print(currentMap.size)
+    
     var multiplier : CGFloat = 100.0
     let mapSize = currentMap.size
     let maxDimension = max(mapSize.width, mapSize.height)
+
     if maxDimension > 5 {
         multiplier = 50.0
     }

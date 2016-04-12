@@ -128,7 +128,7 @@ public class Map {
     
     func move(location: Point) -> Bool {
         if !canMove(location) {
-            print("ERROR: There's a wall there!")
+            print("ERROR: You can't move there!")
             return false
         }
         robot.location = location
@@ -156,6 +156,8 @@ public class Map {
     }
     
     func canMove(location: Point) -> Bool {
+        if location.x < 0 || location.x >= size.width { return false }
+        if location.y < 0 || location.y >= size.height { return false }
         let tile = tileAtLocation(location)
         if tile == .Wall {
             return false
@@ -173,6 +175,19 @@ public class Map {
             robot.facing = .South
         case .South:
             robot.facing = .East
+        }
+    }
+    
+    func turnRight() {
+        switch robot.facing {
+        case .North:
+            robot.facing = .East
+        case .East:
+            robot.facing = .South
+        case .West:
+            robot.facing = .North
+        case .South:
+            robot.facing = .West
         }
     }
     

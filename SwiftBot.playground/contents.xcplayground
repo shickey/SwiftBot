@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' auto-termination-delay='4.804463' display-mode='rendered' timelineScrubberEnabled='true'>
+<playground version='6.0' target-platform='ios' auto-termination-delay='5' display-mode='rendered'>
     <pages>
         <page name='Page 1 - goForward()'/>
         <page name='Page 2 - turnLeft()'/>
+        <page name='Page 5 - The Maze'/>
     </pages>
 </playground>

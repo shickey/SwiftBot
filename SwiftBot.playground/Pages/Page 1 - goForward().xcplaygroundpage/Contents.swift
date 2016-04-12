@@ -3,11 +3,11 @@
  
  Welcome to SwiftBot! SwiftBot is a little orange robot that likes to explore. SwiftBot looks like this:
  
- INSERT SWIFTBOT IMAGE
+ ![SwiftBot](swiftbot.png)
  
  SwiftBot lives in a 2D room with blue walls. Open floor space is white in SwiftBot's world.
  
- INSERT IMAGE OF EXAMPLE ROOM
+ ![SwiftBot's Enivronment](swiftbot_enviro.png)
  
  SwiftBot's goal is explore every square of floor space in their world. To help SwiftBot do this, we give SwiftBot instructions.
  
@@ -39,13 +39,9 @@ instructions = {
     // to explore the whole room
     //
     // WRITE INSTRUCTIONS HERE:
-    
     goForward()
     goForward()
     goForward()
-    
-    
-    
     
     
 } // Be careful not to delete this } curly bracket!
