@@ -17,11 +17,11 @@ public var view : RobotView!
 
 
 let errorFunc = {
-    print("Whoa! You can't use robot instructions outside of the rules section!")
+    print("Whoa! You can't use robot instructions outside of the instructions section!")
 }
 
 let errorFuncReturningBool = { () -> Bool in
-    print("Whoa! You can't use robot instructions outside of the rules section!")
+    print("Whoa! You can't use robot instructions outside of the instructions section!")
     return false
 }
 

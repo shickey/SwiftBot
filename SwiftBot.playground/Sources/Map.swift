@@ -1,5 +1,15 @@
 import Foundation
 
+enum MapTile : Character, Equatable {
+    case Wall = "W"
+    case Space = " "
+    case Explored = "E"
+}
+
+func ==(lhs: MapTile, rhs: MapTile) -> Bool {
+    return lhs.rawValue == rhs.rawValue
+}
+
 public class Map {
     
     var tiles : [[MapTile]] = []
