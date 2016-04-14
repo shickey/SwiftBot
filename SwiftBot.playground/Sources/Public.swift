@@ -33,7 +33,16 @@ public var turnLeft : () -> () = errorFunc
 public var turnRight : () -> () = errorFunc
 public var squaresLeftToExplore : () -> Bool = errorFuncReturningBool
 
-public var instructions : () -> () = {}
+var _instructions : () -> () = {}
+public var instructions : () -> () {
+    get {
+        return _instructions
+    }
+    set(newInstructions) {
+        _instructions = newInstructions
+        run()
+    }
+}
 
 
 public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
@@ -158,7 +167,7 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     
 }
 
-public func setup(page: Int = 0) {
+public func setup(page: Int) {
     currentMap = maps[page]
     
     var multiplier : CGFloat = 100.0

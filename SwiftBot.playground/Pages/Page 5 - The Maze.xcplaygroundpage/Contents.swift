@@ -1,7 +1,6 @@
 //: [Previous](@previous)
 
 setup(3)
-defer { run() }
 
 instructions = {
     

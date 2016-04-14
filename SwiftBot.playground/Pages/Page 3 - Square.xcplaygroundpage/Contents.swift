@@ -1,7 +1,6 @@
 //: [Previous](@previous)
 
 setup(2)
-defer { run() }
 
 instructions = {
     
@@ -27,12 +26,13 @@ instructions = {
         turnLeft()
         turnLeft()
         turnLeft()
-        goForward()
-        turnLeft()
-        turnLeft()
-        turnLeft()
+        if canGoForward() {
+            goForward()
+            turnLeft()
+            turnLeft()
+            turnLeft()
+        }
     }
     
 }
-
 //: [Next](@next)

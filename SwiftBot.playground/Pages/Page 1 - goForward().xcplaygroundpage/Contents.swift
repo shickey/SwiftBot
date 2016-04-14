@@ -26,11 +26,10 @@ Over on the right, you should see SwiftBot in a simple room. Let's program Swift
  
  But first, we're going to need some setup. 
 
- **YOU CAN IGNORE THESE 2 LINES OF CODE (but don't delete them!)**
+ **YOU CAN IGNORE THIS LINE OF CODE (but don't delete it!)**
  */
 
 setup(0)
-defer { run() }
 
 /*:
  Phew. Now that that's out of the way, let's write some instructions for SwiftBot. All instructions go inside the `instructions` block. Here's an example that will make SwiftBot move forward one space, turn left, then move forward two spaces:
@@ -53,12 +52,6 @@ instructions = {
     // to get SwiftBot to explore the whole room.
     //
     // WRITE INSTRUCTIONS HERE:
-    
-    
-    goForward()
-    goForward()
-    goForward()
-    
     
     
     
