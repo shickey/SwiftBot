@@ -53,7 +53,7 @@ instructions = {
     //
     // WRITE INSTRUCTIONS HERE:
     
-    
+    goForward()
     
 } // Be careful not to delete this } curly bracket!
 
