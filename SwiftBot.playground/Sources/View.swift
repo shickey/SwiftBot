@@ -38,6 +38,16 @@ public class RobotView : UIView {
                 }
             }
             
+            // Draw Cookies
+            CGContextSetRGBFillColor(context, 1.0, 0, 0, 1.0)
+            for cookie in level.cookies {
+                let origin = CGPointMake(CGFloat(cookie.x) * tileSize.width, CGFloat(cookie.y) * tileSize.height)
+                let tileRect = CGRectIntegral(CGRectMake(origin.x, origin.y, tileSize.width, tileSize.height))
+                let insetPixels = tileRect.size.width * 0.05
+                let cookieRect = CGRectIntegral(CGRectInset(tileRect, insetPixels, insetPixels))
+                CGContextFillEllipseInRect(context, cookieRect)
+            }
+            
             // Draw Robot
             let robotOrigin = CGPointMake(CGFloat(level.robot.location.x) * tileSize.width, CGFloat(level.robot.location.y) * tileSize.height)
             let robotRect = CGRectIntegral(CGRectMake(robotOrigin.x, robotOrigin.y, tileSize.width, tileSize.height))
@@ -51,6 +61,7 @@ public class RobotView : UIView {
             CGContextClosePath(context)
             CGContextSetRGBFillColor(context, 1.0, 0.75, 0.5, 1.0)
             CGContextFillPath(context)
+            
         }
         else {
             super.drawRect(rect)

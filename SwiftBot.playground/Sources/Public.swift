@@ -42,6 +42,8 @@ let errorFuncReturningBool = { () -> Bool in
 public var canGoForward : () -> Bool = errorFuncReturningBool
 public var goForward : () -> () = errorFunc
 public var turnLeft : () -> () = errorFunc
+public var senseCookie : () -> Bool = errorFuncReturningBool
+public var placeCookie : () -> () = errorFunc
 
 var _instructions : () -> () = {}
 public var instructions : () -> () {
@@ -88,10 +90,31 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
         })
     }
     
+    senseCookie = {
+        if encounteredError { return false }
+        return robotSenseCookie(levelCopy)
+    }
+    
+    placeCookie = {
+        if encounteredError { return }
+        let success = robotPlaceCookie(levelCopy)
+        if success {
+            moves.append({
+                robotPlaceCookie(currentLevel)
+            })
+        }
+        else {
+            encounteredError = true
+            return
+        }
+    }
+    
     defer {
         canGoForward = errorFuncReturningBool
         goForward = errorFunc
         turnLeft = errorFunc
+        senseCookie = errorFuncReturningBool
+        placeCookie = errorFunc
     }
     
     instructions()

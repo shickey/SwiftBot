@@ -55,7 +55,7 @@ instructions = {
     
     goForward()
     goForward()
-    goForward()
+    placeCookie()
     
     
 } // Be careful not to delete this } curly bracket!

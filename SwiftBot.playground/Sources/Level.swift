@@ -1,10 +1,17 @@
 import Foundation
 
+struct Robot {
+    var location : Point = Point(0,0)
+    var facing : Direction = .North
+}
+
+typealias Cookie = Point
+
 public class Level {
     
     var map : Map
     var robot : Robot = Robot()
-    var cookies : [Point] = []
+    var cookies : [Cookie] = []
     
     public init(map newMap: Map) {
         map = newMap
@@ -95,4 +102,22 @@ func canMoveRobot(level: Level, _ location: Point) -> Bool {
     }
     return true
 }
-    
+
+func robotPlaceCookie(level: Level) -> Bool {
+    if robotSenseCookie(level) {
+        print("ERROR: There's already a cookie there!")
+        return false
+    }
+    level.cookies.append(level.robot.location)
+    return true
+}
+
+func robotSenseCookie(level: Level) -> Bool {
+    let position = level.robot.location
+    for cookie in level.cookies {
+        if cookie == position {
+            return true
+        }
+    }
+    return false
+}
