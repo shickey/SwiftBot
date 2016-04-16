@@ -13,13 +13,19 @@ struct Goal {
 
 typealias Cookie = Point
 
+struct LevelOptions {
+    var animationInterval : Double = 0.25
+    var smokeTrailsEnabled : Bool = false
+}
+
 public class Level {
     
     var map : Map
     var robot : Robot = Robot()
     var cookies : Set<Cookie> = []
     var path : [Point] = []
-    var drawPath = false // TODO: This should probably be part of a more general set of Level Options
+    
+    var options : LevelOptions = LevelOptions()
     
     public init(map newMap: Map) {
         map = newMap

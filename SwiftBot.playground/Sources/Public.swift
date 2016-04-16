@@ -1,8 +1,6 @@
 import UIKit
 import XCPlayground
 
-let ANIMATION_INTERVAL = 0.01
-
 var levels : [Level] = ({
     var lineMap = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW")
     var line = Level(map: lineMap, startingLocation: Point(1, 4))
@@ -125,7 +123,7 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     
     var moveNumber = 0;
     
-    let timer = CFRunLoopTimerCreateWithHandler(nil, CFAbsoluteTimeGetCurrent() + ANIMATION_INTERVAL, ANIMATION_INTERVAL, 0, 0, { (timer) in
+    let timer = CFRunLoopTimerCreateWithHandler(nil, CFAbsoluteTimeGetCurrent() + currentLevel.options.animationInterval, currentLevel.options.animationInterval, 0, 0, { (timer) in
         if moveNumber < moves.count {
             moves[moveNumber]()
             view.setNeedsDisplay()

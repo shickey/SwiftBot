@@ -39,7 +39,7 @@ public class RobotView : UIView {
             }
             
             // Draw path
-            if level.drawPath && level.path.count > 0 {
+            if level.options.smokeTrailsEnabled && level.path.count > 0 {
                 let alphaDelta : CGFloat = 1.0 / CGFloat(level.path.count)
                 var alpha : CGFloat = 0.0
                 for pathComponent in level.path {
