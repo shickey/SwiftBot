@@ -72,31 +72,3 @@ public class Map {
     }
     
 }
-
-//extension Map : CustomStringConvertible {
-//    
-//    // TODO: Rewrite this function to blit cookies and robot
-//    public var description: String {
-//        get {
-//            var str = ""
-//            for y in 0..<size.height {
-//                for x in 0..<size.width {
-//                    let tile = tiles[y][x]
-//                    switch tile {
-//                    case .Wall:
-//                        str += "x"
-//                    case .Space:
-//                        str += " "
-//                    }
-//                }
-//                str += "\n"
-//            }
-//            
-//            let robotIndex = ((robot.location.y * size.width) + robot.location.y) + robot.location.x // We add an extra robot.location.y to account for \n characters
-//            let start = str.startIndex.advancedBy(robotIndex)
-//            let end = start.advancedBy(1)
-//            str = str.stringByReplacingCharactersInRange(start..<end, withString: "R")
-//            return str
-//        }
-//    }
-//}

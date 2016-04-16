@@ -153,3 +153,57 @@ func robotSenseCookie(level: Level) -> Bool {
     }
     return false
 }
+
+/*
+ * MARK: Debug
+ */
+
+extension Level : CustomStringConvertible {
+    
+    public var description: String {
+        get {
+            var lines : [String] = []
+            for y in 0..<map.size.height {
+                var line = ""
+                for x in 0..<map.size.width {
+                    let tile = map.tileAtLocation(Point(x, y))
+                    switch tile {
+                    case .Wall:
+                        line += "x"
+                    case .Space:
+                        line += " "
+                    }
+                }
+                lines.append(line)
+            }
+            
+            // "Blit" Cookies
+            for cookie in cookies {
+                var lineToBlitTo = lines[cookie.y]
+                let start = lineToBlitTo.startIndex.advancedBy(cookie.x)
+                let end = start.advancedBy(1)
+                lines[cookie.y] = lineToBlitTo.stringByReplacingCharactersInRange(start..<end, withString: "*")
+            }
+            
+            // "Blit" Bot
+            // TODO: This will overwrite a cookie character if the robot is on a cookie
+            var blitCharacter = "^"
+            switch robot.facing {
+            case .North:
+                blitCharacter = "^"
+            case .West:
+                blitCharacter = "<"
+            case .South:
+                blitCharacter = "v"
+            case .East:
+                blitCharacter = ">"
+            }
+            var lineToBlitTo = lines[robot.location.y]
+            let start = lineToBlitTo.startIndex.advancedBy(robot.location.x)
+            let end = start.advancedBy(1)
+            lines[robot.location.y] = lineToBlitTo.stringByReplacingCharactersInRange(start..<end, withString: blitCharacter)
+            
+            return lines.joinWithSeparator("\n")
+        }
+    }
+}
