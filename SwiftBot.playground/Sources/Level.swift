@@ -5,13 +5,19 @@ struct Robot {
     var facing : Direction = .North
 }
 
+struct Goal {
+    var robotLocation : Point?
+    var robotOrientation : Direction?
+    var cookies : Set<Cookie>?
+}
+
 typealias Cookie = Point
 
 public class Level {
     
     var map : Map
     var robot : Robot = Robot()
-    var cookies : [Cookie] = []
+    var cookies : Set<Cookie> = []
     
     public init(map newMap: Map) {
         map = newMap
@@ -25,11 +31,16 @@ public class Level {
     
     public func copy() -> Level {
         let c = Level(map: map)
+        c.cookies = cookies
         c.robot = robot
         return c
     }
     
 }
+
+/*
+ * MARK: Level Functions
+ */
 
 func randomlyPlaceRobot(level: Level) {
     let map = level.map
@@ -43,6 +54,27 @@ func randomlyPlaceRobot(level: Level) {
     }
     moveRobot(level, Point(x, y))
 }
+
+func levelMatchesGoal(level: Level, _ goal: Goal) -> Bool {
+    if let robotLocation = goal.robotLocation {
+        if robotLocation != level.robot.location {
+            return false
+        }
+    }
+    if let robotOrientation = goal.robotOrientation {
+        if robotOrientation != level.robot.facing {
+            return false
+        }
+    }
+    if let cookies = goal.cookies {
+        if cookies != level.cookies {
+            return false
+        }
+    }
+    return true
+}
+
+
     
     
 /*
@@ -108,7 +140,7 @@ func robotPlaceCookie(level: Level) -> Bool {
         print("ERROR: There's already a cookie there!")
         return false
     }
-    level.cookies.append(level.robot.location)
+    level.cookies.insert(level.robot.location)
     return true
 }
 

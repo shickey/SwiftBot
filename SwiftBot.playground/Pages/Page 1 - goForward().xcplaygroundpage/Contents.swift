@@ -53,9 +53,15 @@ instructions = {
     //
     // WRITE INSTRUCTIONS HERE:
     
-    goForward()
-    goForward()
-    placeCookie()
+    while canGoForward() {
+        if !senseCookie() {
+            placeCookie()
+        }
+        goForward()
+    }
+    if !senseCookie() {
+        placeCookie()
+    }
     
     
 } // Be careful not to delete this } curly bracket!

@@ -17,6 +17,14 @@ public func ==(lhs: Point, rhs: Point) -> Bool {
     return (lhs.x == rhs.x) && (lhs.y == rhs.y)
 }
 
+extension Point : Hashable {
+    public var hashValue : Int {
+        // TODO: This is an absolutely ludicrous hash function, but has no
+        // collisions for points in -50 < x < 50 and -50 < y < 50
+        return "(\(x), \(y))".hashValue
+    }
+}
+
 /*
  * Size
  */
