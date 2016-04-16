@@ -38,6 +38,19 @@ public class RobotView : UIView {
                 }
             }
             
+            // Draw path
+            if level.drawPath && level.path.count > 0 {
+                let alphaDelta : CGFloat = 1.0 / CGFloat(level.path.count)
+                var alpha : CGFloat = 0.0
+                for pathComponent in level.path {
+                    let origin = CGPointMake(CGFloat(pathComponent.x) * tileSize.width, CGFloat(pathComponent.y) * tileSize.height)
+                    let tileRect = CGRectIntegral(CGRectMake(origin.x, origin.y, tileSize.width, tileSize.height))
+                    CGContextSetRGBFillColor(context, 0.3, 0.3, 0.3, alpha)
+                    CGContextFillRect(context, tileRect)
+                    alpha += alphaDelta
+                }
+            }
+            
             // Draw Cookies
             CGContextSetRGBFillColor(context, 1.0, 0, 0, 1.0)
             for cookie in level.cookies {

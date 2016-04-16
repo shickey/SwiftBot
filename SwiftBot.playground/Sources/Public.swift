@@ -1,7 +1,7 @@
 import UIKit
 import XCPlayground
 
-let ANIMATION_INTERVAL = 0.1
+let ANIMATION_INTERVAL = 0.01
 
 var levels : [Level] = ({
     var lineMap = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW")

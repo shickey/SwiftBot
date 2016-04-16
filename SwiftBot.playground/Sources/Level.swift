@@ -18,6 +18,8 @@ public class Level {
     var map : Map
     var robot : Robot = Robot()
     var cookies : Set<Cookie> = []
+    var path : [Point] = []
+    var drawPath = false // TODO: This should probably be part of a more general set of Level Options
     
     public init(map newMap: Map) {
         map = newMap
@@ -87,6 +89,7 @@ func moveRobot(level: Level, _ location: Point) -> Bool {
         return false
     }
     level.robot.location = location
+    level.path.append(location)
     return true
 }
 
@@ -179,7 +182,7 @@ extension Level : CustomStringConvertible {
             
             // "Blit" Cookies
             for cookie in cookies {
-                var lineToBlitTo = lines[cookie.y]
+                let lineToBlitTo = lines[cookie.y]
                 let start = lineToBlitTo.startIndex.advancedBy(cookie.x)
                 let end = start.advancedBy(1)
                 lines[cookie.y] = lineToBlitTo.stringByReplacingCharactersInRange(start..<end, withString: "*")
@@ -198,7 +201,7 @@ extension Level : CustomStringConvertible {
             case .East:
                 blitCharacter = ">"
             }
-            var lineToBlitTo = lines[robot.location.y]
+            let lineToBlitTo = lines[robot.location.y]
             let start = lineToBlitTo.startIndex.advancedBy(robot.location.x)
             let end = start.advancedBy(1)
             lines[robot.location.y] = lineToBlitTo.stringByReplacingCharactersInRange(start..<end, withString: blitCharacter)
