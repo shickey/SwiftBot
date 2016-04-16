@@ -2,14 +2,14 @@ import UIKit
 
 public class RobotView : UIView {
     
-    var storedMap : Map?
+    var storedLevel : Level?
     
-    public var map : Map? {
+    public var level : Level? {
         get {
-            return storedMap
+            return storedLevel
         }
-        set(newMap) {
-            storedMap = newMap
+        set(newLevel) {
+            storedLevel = newLevel
             setNeedsDisplay()
         }
     }
@@ -17,7 +17,10 @@ public class RobotView : UIView {
     public override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         CGContextClearRect(context, rect)
-        if let map = storedMap {
+        if let level = storedLevel {
+            
+            // Draw Map
+            let map = level.map
             let mapSize = map.size
             let tileSize = computeTileSize()
             for y in 0..<mapSize.height {
@@ -30,13 +33,13 @@ public class RobotView : UIView {
                         CGContextSetRGBFillColor(context, 0, 0, 1.0, 1.0)
                     case .Space:
                         CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0)
-                    case .Explored:
-                        CGContextSetRGBFillColor(context, 0.5, 0.5, 0.5, 1.0)
                     }
                     CGContextFillRect(context, tileRect)
                 }
             }
-            let robotOrigin = CGPointMake(CGFloat(map.robot.location.x) * tileSize.width, CGFloat(map.robot.location.y) * tileSize.height)
+            
+            // Draw Robot
+            let robotOrigin = CGPointMake(CGFloat(level.robot.location.x) * tileSize.width, CGFloat(level.robot.location.y) * tileSize.height)
             let robotRect = CGRectIntegral(CGRectMake(robotOrigin.x, robotOrigin.y, tileSize.width, tileSize.height))
             
             let points = pointsForRobotRect(robotRect)
@@ -55,7 +58,7 @@ public class RobotView : UIView {
     }
     
     func pointsForRobotRect(robotRect: CGRect) -> [CGPoint] {
-        if let map = storedMap {
+        if let level = storedLevel {
             let minX = CGRectGetMinX(robotRect)
             let minY = CGRectGetMinY(robotRect)
             let maxX = CGRectGetMaxX(robotRect)
@@ -65,7 +68,7 @@ public class RobotView : UIView {
             
             var points : [CGPoint] = []
             
-            switch map.robot.facing {
+            switch level.robot.facing {
             case .North:
                 points.append(CGPointMake(minX, maxY))
                 points.append(CGPointMake(minX, midY))
@@ -97,8 +100,8 @@ public class RobotView : UIView {
     }
     
     func computeTileSize() -> CGSize {
-        if let mapState = storedMap {
-            let mapSize = mapState.size
+        if let level = storedLevel {
+            let mapSize = level.map.size
             return CGSizeMake(bounds.width / CGFloat(mapSize.width), bounds.height / CGFloat(mapSize.height))
         }
         return CGSizeZero

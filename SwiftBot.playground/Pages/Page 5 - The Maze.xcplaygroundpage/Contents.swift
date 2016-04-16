@@ -19,18 +19,18 @@ instructions = {
 //        return can
 //    }
     
-    while squaresLeftToExplore() {
-        if canGoLeft() {
-            turnLeft()
-            goForward()
-        }
-        else if canGoForward() {
-            goForward()
-        }
-        else {
-            turnRight()
-        }
-    }
+//    while squaresLeftToExplore() {
+//        if canGoLeft() {
+//            turnLeft()
+//            goForward()
+//        }
+//        else if canGoForward() {
+//            goForward()
+//        }
+//        else {
+//            turnRight()
+//        }
+//    }
 }
 
 //: [Next](@next)

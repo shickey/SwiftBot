@@ -1,17 +1,31 @@
 import UIKit
 import XCPlayground
 
-let ANIMATION_INTERVAL = 0.01
+let ANIMATION_INTERVAL = 0.1
 
-var maps : [Map] = ({
-    var line = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW", startingLocation: Point(1, 4))
-    var left = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW", startingLocation: Point(3, 3))
-    var square = Map(size: Size(10, 10))
-    var maze = Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW")
+var levels : [Level] = ({
+    var lineMap = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW")
+    var line = Level(map: lineMap, startingLocation: Point(1, 4))
+    
+    var leftMap = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW");
+    var left = Level(map: leftMap, startingLocation: Point(3, 3))
+    
+    var square = Level(map: Map(size: Size(10, 10)))
+    
+    var maze = Level(map: Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW"))
+    
     return [line, left, square, maze]
 })()
 
-public var currentMap = maps[0]
+//var maps : [Map] = ({
+//    var line = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW", startingLocation: Point(1, 4))
+//    var left = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW", startingLocation: Point(3, 3))
+//    var square = Map(size: Size(10, 10))
+//    var maze = Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW")
+//    return [line, left, square, maze]
+//})()
+
+public var currentLevel = levels[0]
 
 public var view : RobotView!
 
@@ -26,12 +40,8 @@ let errorFuncReturningBool = { () -> Bool in
 }
 
 public var canGoForward : () -> Bool = errorFuncReturningBool
-public var canGoLeft : () -> Bool = errorFuncReturningBool
-public var canGoRight : () -> Bool = errorFuncReturningBool
 public var goForward : () -> () = errorFunc
 public var turnLeft : () -> () = errorFunc
-public var turnRight : () -> () = errorFunc
-public var squaresLeftToExplore : () -> Bool = errorFuncReturningBool
 
 var _instructions : () -> () = {}
 public var instructions : () -> () {
@@ -47,53 +57,21 @@ public var instructions : () -> () {
 
 public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     
-    var mapCopy = currentMap.copy()
+    let levelCopy = currentLevel.copy()
     var encounteredError = false
     var moves : [() -> ()] = []
     
     canGoForward = {
         if encounteredError { return false }
-        return mapCopy.canMove()
-    }
-    
-    canGoLeft = {
-        if encounteredError { return false }
-        var left : Direction = .North
-        switch mapCopy.robot.facing {
-        case .North:
-            left = .West
-        case .East:
-            left = .North
-        case .West:
-            left = .South
-        case .South:
-            left = .East
-        }
-        return mapCopy.canMove(left)
-    }
-    
-    canGoRight = {
-        if encounteredError { return false }
-        var right : Direction = .North
-        switch mapCopy.robot.facing {
-        case .North:
-            right = .East
-        case .East:
-            right = .South
-        case .West:
-            right = .North
-        case .South:
-            right = .West
-        }
-        return mapCopy.canMove(right)
+        return canMoveRobot(levelCopy)
     }
     
     goForward = {
         if encounteredError { return }
-        let success = mapCopy.move()
+        let success = moveRobot(levelCopy)
         if success {
             moves.append({
-                currentMap.move()
+                moveRobot(currentLevel)
             })
         }
         else {
@@ -104,33 +82,16 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     
     turnLeft = {
         if encounteredError { return }
-        mapCopy.turnLeft()
+        turnRobotLeft(levelCopy)
         moves.append({
-            currentMap.turnLeft()
+            turnRobotLeft(currentLevel)
         })
-    }
-    
-    turnRight = {
-        if encounteredError { return }
-        mapCopy.turnRight()
-        moves.append({
-            currentMap.turnRight()
-        })
-    }
-    
-    squaresLeftToExplore = {
-        if encounteredError { return false }
-        return !mapCopy.isComplete()
     }
     
     defer {
         canGoForward = errorFuncReturningBool
-        canGoLeft = errorFuncReturningBool
-        canGoRight = errorFuncReturningBool
         goForward = errorFunc
         turnLeft = errorFunc
-        turnRight = errorFunc
-        squaresLeftToExplore = errorFuncReturningBool
     }
     
     instructions()
@@ -168,10 +129,10 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
 }
 
 public func setup(page: Int) {
-    currentMap = maps[page]
+    currentLevel = levels[page]
     
     var multiplier : CGFloat = 100.0
-    let mapSize = currentMap.size
+    let mapSize = currentLevel.map.size
     let maxDimension = max(mapSize.width, mapSize.height)
 
     if maxDimension > 5 {
@@ -182,7 +143,7 @@ public func setup(page: Int) {
     }
     
     view = RobotView(frame: CGRectMake(0, 0, CGFloat(mapSize.width) * multiplier, CGFloat(mapSize.height) * multiplier))
-    view.map = currentMap
+    view.level = currentLevel
     
     XCPlaygroundPage.currentPage.liveView = view
 }

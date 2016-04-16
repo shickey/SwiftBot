@@ -54,6 +54,9 @@ instructions = {
     // WRITE INSTRUCTIONS HERE:
     
     goForward()
+    goForward()
+    goForward()
+    
     
 } // Be careful not to delete this } curly bracket!
 

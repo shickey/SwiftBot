@@ -13,26 +13,26 @@ instructions = {
     }
     turnLeft()
     
-    while squaresLeftToExplore() {
-        while canGoForward() {
-            goForward()
-        }
-        turnLeft()
-        goForward()
-        turnLeft()
-        while canGoForward() {
-            goForward()
-        }
-        turnLeft()
-        turnLeft()
-        turnLeft()
-        if canGoForward() {
-            goForward()
-            turnLeft()
-            turnLeft()
-            turnLeft()
-        }
-    }
+//    while squaresLeftToExplore() {
+//        while canGoForward() {
+//            goForward()
+//        }
+//        turnLeft()
+//        goForward()
+//        turnLeft()
+//        while canGoForward() {
+//            goForward()
+//        }
+//        turnLeft()
+//        turnLeft()
+//        turnLeft()
+//        if canGoForward() {
+//            goForward()
+//            turnLeft()
+//            turnLeft()
+//            turnLeft()
+//        }
+//    }
     
 }
 //: [Next](@next)
