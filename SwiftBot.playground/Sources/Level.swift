@@ -41,6 +41,7 @@ public class Level {
         let c = Level(map: map)
         c.cookies = cookies
         c.robot = robot
+        c.options = options
         return c
     }
     
@@ -150,6 +151,15 @@ func robotPlaceCookie(level: Level) -> Bool {
         return false
     }
     level.cookies.insert(level.robot.location)
+    return true
+}
+
+func robotPickupCookie(level: Level) -> Bool {
+    if !robotSenseCookie(level) {
+        print("ERROR: There's no cookie to pick up!")
+        return false
+    }
+    level.cookies.remove(level.robot.location)
     return true
 }
 

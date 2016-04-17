@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' auto-termination-delay='5' display-mode='rendered'>
+<playground version='6.0' target-platform='ios' auto-termination-delay='5' display-mode='rendered' executeOnSourceChanges='false'>
     <pages>
-        <page name='Page 1 - goForward()'/>
-        <page name='Page 2 - turnLeft()'/>
-        <page name='Page 3 - Square'/>
-        <page name='Page 5 - The Maze'/>
+        <page name='Page 1 - Intro'/>
+        <page name='Page 2 - Turning Left'/>
+        <page name='Page 3 - More Complex'/>
+        <page name='Page 4 - Removing Redudancies'/>
+        <page name='Page 5 - Midpoint'/>
     </pages>
 </playground>
