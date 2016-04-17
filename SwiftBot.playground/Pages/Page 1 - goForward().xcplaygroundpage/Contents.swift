@@ -1,7 +1,7 @@
 /*:
  # SwiftBot!
  
- Welcome to SwiftBot! SwiftBot is a little orange robot that likes to explore. SwiftBot looks like this:
+ Welcome to SwiftBot! SwiftBot is a little orange robot that likes cookies and exploration. SwiftBot looks like this:
  
  ![SwiftBot](swiftbot.png)
  
@@ -9,22 +9,13 @@
  
  ![SwiftBot's Enivronment](swiftbot_enviro.png)
  
- SwiftBot's goal is explore every square of floor space in their world. To help SwiftBot do this, we give SwiftBot instructions.
+ Each square on the floor can also contain a cookie. A cookie looks like a red circle in SwiftBot's world.
  
- ## SwiftBot Commands
- SwiftBot knows exactly 2 commands:
- 
- ### `goForward()`
- The `goForward()` command will make SwiftBot move forward one space in the direction they're currently facing
- 
- ### `turnLeft()`
- The `turnLeft()` command will make SwiftBot turn left in place (i.e., without leaving their current square)
+ ![Cookies!](swiftbot_cookies.png)
 
- ## Programming SwiftBot
+ ## Setup
 
-Over on the right, you should see SwiftBot in a simple room. Let's program SwiftBot to get them to explore the whole space!
- 
- But first, we're going to need some setup. 
+Over on the right, you should see SwiftBot standing in a hallway. In a moment, we'll write some instructions to move SwiftBot to the other end of the hallway. But first, we're going to need some setup.
 
  **YOU CAN IGNORE THIS LINE OF CODE (but don't delete it!)**
  */
@@ -32,36 +23,54 @@ Over on the right, you should see SwiftBot in a simple room. Let's program Swift
 setup(0)
 
 /*:
- Phew. Now that that's out of the way, let's write some instructions for SwiftBot. All instructions go inside the `instructions` block. Here's an example that will make SwiftBot move forward one space, turn left, then move forward two spaces:
+ Phew. Now that that's out of the way, let's get SwiftBot to do stuff.
+ 
+ ## Your Goal
+ Your goal is to get SwiftBot to place a cookie at the end of the hallway. When finished, your map should look like this:
+ 
+ ![Your Goal](hallway_goal.png)
+ 
+ ## SwiftBot Commands
+ SwiftBot knows very few commands. Here are 2 of them:
+ 
+ ### `goForward()`
+ The `goForward()` command will make SwiftBot move forward one space in the direction they're currently facing
+ 
+ ### `placeCookie()`
+ The `placeCookie()` command will make SwiftBot drop a cookie on the space they're currently standing on. But be careful! Placing a cookie on a square that already has one will create an UNSTABLE COOKIE STACK which is an error.
+ 
+ ## Programming SwiftBot
+  Let's write some instructions for SwiftBot. All instructions go inside the `instructions` block. Here's an example that will make SwiftBot move forward one space, drop a cookie, then move forward two spaces:
 
     instructions = {
 
         goForward()
-        turnLeft()
+        placeCookie()
         goForward()
         goForward()
 
     }
  */
+
 instructions = {
     
-    // Write your instructions for SwiftBot below these lines!
-    // Try writing goForward(), save, and see what happens.
+    // Write your instructions for SwiftBot below these lines 
+    // (and before the `}` curly bracket)!
+    //
+    // Try writing goForward()
+    // Then save, and see what happens.
     // Note that the parentheses are necessary!
+    // 
     // Once that works, write the rest of the instructions (one per line)
-    // to get SwiftBot to explore the whole room.
+    // to get SwiftBot to move to the end of the hallway
+    // and drop a cookie
     //
     // WRITE INSTRUCTIONS HERE:
     
-    while canGoForward() {
-        if !senseCookie() {
-            placeCookie()
-        }
-        goForward()
-    }
-    if !senseCookie() {
-        placeCookie()
-    }
+    
+    
+    
+    
     
     
 } // Be careful not to delete this } curly bracket!

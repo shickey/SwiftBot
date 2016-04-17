@@ -4,35 +4,40 @@ setup(2)
 
 instructions = {
     
-    while canGoForward() {
-        goForward()
-    }
-    turnLeft()
-    while canGoForward() {
-        goForward()
-    }
-    turnLeft()
-    
-//    while squaresLeftToExplore() {
-//        while canGoForward() {
-//            goForward()
-//        }
-//        turnLeft()
+//    // Find corner
+//    while canGoForward() {
 //        goForward()
-//        turnLeft()
-//        while canGoForward() {
-//            goForward()
-//        }
-//        turnLeft()
-//        turnLeft()
-//        turnLeft()
-//        if canGoForward() {
-//            goForward()
-//            turnLeft()
-//            turnLeft()
-//            turnLeft()
-//        }
 //    }
+//    turnLeft()
+//    while canGoForward() {
+//        goForward()
+//    }
+//    turnLeft()
+//    
+//    placeCookie()
+//    goForward()
+//    goForward()
+//    placeCookie()
+//    goForward()
+//    goForward()
+//    placeCookie()
+//    goForward()
+//    goForward()
+//    placeCookie()
+//    goForward()
+//    
+//    turnLeft()
+//    goForward()
+//    turnLeft()
     
+    placeCookie()
+    goForward()
+    goForward()
+    turnLeft()
+    goForward()
+    placeCookie()
+    goForward()
+    goForward()
+    goForward()
 }
 //: [Next](@next)

@@ -15,14 +15,6 @@ var levels : [Level] = ({
     return [line, left, square, maze]
 })()
 
-//var maps : [Map] = ({
-//    var line = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW", startingLocation: Point(1, 4))
-//    var left = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW", startingLocation: Point(3, 3))
-//    var square = Map(size: Size(10, 10))
-//    var maze = Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW")
-//    return [line, left, square, maze]
-//})()
-
 public var currentLevel = levels[0]
 
 public var view : RobotView!
