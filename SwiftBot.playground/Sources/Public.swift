@@ -1,6 +1,8 @@
 import UIKit
 import XCPlayground
 
+let DEBUG = true
+
 var levels : [Level] = ({
     var lineMap = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW")
     var line = Level(map: lineMap, startingLocation: Point(1, 4))
@@ -10,6 +12,7 @@ var levels : [Level] = ({
     
     var donutMap = Map(mapString: "WWWWWWW\nW     W\nW WWW W\nW WWW W\nW WWW W\nW     W\nWWWWWWW")
     var donut = Level(map:donutMap, startingLocation: Point(5, 5));
+    donut.options.smokeTrailsEnabled = true
     
     var square = Level(map: Map(size: Size(10, 10)), startingLocation: Point(1, 8))
     
@@ -45,75 +48,79 @@ public var instructions : () -> () {
         return _instructions
     }
     set(newInstructions) {
-        _instructions = newInstructions
+        _instructions = {
+            newInstructions()
+        }
         run()
     }
 }
 
 
-public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
+public func run() {
     
     let levelCopy = currentLevel.copy()
     var encounteredError = false
-    var moves : [() -> ()] = []
+    var frames : ExecutionFrame! = nil
+    
+    func addFrame(frame: ExecutionFrame) {
+        if frames == nil {
+            frames = frame
+        }
+        else {
+            frames.append(frame)
+        }
+    }
     
     canGoForward = {
         if encounteredError { return false }
-        return canMoveRobot(levelCopy)
+        let frame = ExecutionFrame(instruction: .CanGoForward)
+        let result = executeFrameOnLevel(frame, level: levelCopy)
+        addFrame(frame)
+        return result.sensingResult!
     }
     
     goForward = {
         if encounteredError { return }
-        let success = moveRobot(levelCopy)
-        if success {
-            moves.append({
-                moveRobot(currentLevel)
-            })
-        }
-        else {
+        let frame = ExecutionFrame(instruction: .GoForward)
+        let result = executeFrameOnLevel(frame, level: levelCopy)
+        addFrame(ExecutionFrame(instruction: .GoForward))
+        if !result.success {
             encounteredError = true
-            return
         }
     }
     
     turnLeft = {
         if encounteredError { return }
-        turnRobotLeft(levelCopy)
-        moves.append({
-            turnRobotLeft(currentLevel)
-        })
+        let frame = ExecutionFrame(instruction: .TurnLeft)
+        let result = executeFrameOnLevel(frame, level: levelCopy)
+        addFrame(frame)
     }
     
     senseCookie = {
         if encounteredError { return false }
-        return robotSenseCookie(levelCopy)
+        let frame = ExecutionFrame(instruction: .SenseCookie)
+        let result = executeFrameOnLevel(frame, level: levelCopy)
+        addFrame(frame)
+        return result.sensingResult!
     }
     
     placeCookie = {
         if encounteredError { return }
-        let success = robotPlaceCookie(levelCopy)
-        if success {
-            moves.append({
-                robotPlaceCookie(currentLevel)
-            })
-        }
-        else {
+        let frame = ExecutionFrame(instruction: .PlaceCookie)
+        let result = executeFrameOnLevel(frame, level: levelCopy)
+        addFrame(ExecutionFrame(instruction: .PlaceCookie))
+        if !result.success {
             encounteredError = true
-            return
         }
     }
     
     pickupCookie = {
         if encounteredError { return }
-        let success = robotPickupCookie(levelCopy)
-        if success {
-            moves.append({
-                robotPickupCookie(currentLevel)
-            })
-        }
-        else {
+        let frame = ExecutionFrame(instruction: .PickupCookie)
+        let result = executeFrameOnLevel(frame, level: levelCopy)
+        addFrame(ExecutionFrame(instruction: .PickupCookie))
+        if !result.success {
             encounteredError = true
-            return
         }
     }
     
@@ -127,20 +134,42 @@ public func run(completion: (() -> ())? = nil, afterEach: (() -> ())? = nil) {
     
     instructions()
     
-    if let nonNilCompletion = completion {
-        moves.append(nonNilCompletion)
+    if DEBUG {
+        print("Execution log:")
+        var framesToPrint = frames
+        while framesToPrint != nil {
+            print("    " + functionNameForInstruction(framesToPrint.instruction))
+            framesToPrint = framesToPrint.next
+        }
+        print()
+        print("Final Level State:\n")
+        print(levelCopy) // Print final state of map for debugging
+        print()
     }
     
-    var moveNumber = 0;
+    var currentFrame : ExecutionFrame? = frames
     
     let timer = CFRunLoopTimerCreateWithHandler(nil, CFAbsoluteTimeGetCurrent() + currentLevel.options.animationInterval, currentLevel.options.animationInterval, 0, 0, { (timer) in
-        if moveNumber < moves.count {
-            moves[moveNumber]()
-            view.setNeedsDisplay()
-            if let nonNilAfterEach = afterEach {
-                nonNilAfterEach()
+        if let frame = currentFrame {
+            let result = executeFrameOnLevel(frame, level: currentLevel)
+            if result.error != nil {
+                switch result.error! {
+                case .CannotMoveIntoWall:
+                    print("ERROR: SwiftBot cannot move into a wall!")
+                case .NoCookieToPickup:
+                    print("ERROR: There's no cookie for SwiftBot to pickup!")
+                case .CannotStackCookies:
+                    print("ERROR: UNSTABLE COOKIE STACK! SwiftBot can place a cookie on another cookie!")
+                }
             }
-            moveNumber = moveNumber + 1
+            
+            if DEBUG {
+                print(frame)
+                print(result)
+            }
+            
+            view.setNeedsDisplay()
+            currentFrame = frame.next
         }
         else {
             CFRunLoopTimerInvalidate(timer)

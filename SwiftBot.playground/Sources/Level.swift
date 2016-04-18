@@ -92,7 +92,6 @@ func levelMatchesGoal(level: Level, _ goal: Goal) -> Bool {
 
 func moveRobot(level: Level, _ location: Point) -> Bool {
     if !canMoveRobot(level, location) {
-        print("ERROR: You can't move there!")
         return false
     }
     level.robot.location = location
@@ -147,7 +146,6 @@ func canMoveRobot(level: Level, _ location: Point) -> Bool {
 
 func robotPlaceCookie(level: Level) -> Bool {
     if robotSenseCookie(level) {
-        print("ERROR: There's already a cookie there!")
         return false
     }
     level.cookies.insert(level.robot.location)
@@ -156,7 +154,6 @@ func robotPlaceCookie(level: Level) -> Bool {
 
 func robotPickupCookie(level: Level) -> Bool {
     if !robotSenseCookie(level) {
-        print("ERROR: There's no cookie to pick up!")
         return false
     }
     level.cookies.remove(level.robot.location)
@@ -188,7 +185,7 @@ extension Level : CustomStringConvertible {
                     let tile = map.tileAtLocation(Point(x, y))
                     switch tile {
                     case .Wall:
-                        line += "x"
+                        line += "#"
                     case .Space:
                         line += " "
                     }

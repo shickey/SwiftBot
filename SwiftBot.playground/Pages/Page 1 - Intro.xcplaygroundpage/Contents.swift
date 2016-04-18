@@ -72,7 +72,6 @@ instructions = {
     
     
     
-    
 } // Be careful not to delete this } curly bracket!
 
 /*:
