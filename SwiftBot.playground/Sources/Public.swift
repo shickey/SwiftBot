@@ -1,17 +1,107 @@
 import UIKit
 import XCPlayground
 
-let DEBUG = true
+let DEBUG = false
 
 var levels : [Level] = ({
-    var lineMap = Map(mapString: "WWWWW\nWW WW\nWW WW\nWW WW\nWW WW\nWWWWW")
-    var line = Level(map: lineMap, startingLocation: Point(2, 4))
+    var lineMap = Map(mapString: "WWWWWWW\nWWW WWW\nWWW WWW\nWWW WWW\nWWW WWW\nWWWWWWW")
+    var line = Level(map: lineMap, startingLocation: Point(3, 4))
+    line.goalValidator = {
+        var valid = true
+        var errors : [String] = []
+        
+        if line.robot.location != Point(3, 1) {
+            valid = false
+            errors.append("SwiftBot isn't at the end of the hallway")
+        }
+        
+        if line.cookies.count == 0 || !line.cookies.contains(Cookie(3, 1)) {
+            valid = false
+            errors.append("There is no cookie at the end of the hallway")
+        }
+        else if line.cookies.count > 1 {
+            valid = false
+            errors.append("There are too many cookies on the floor")
+        }
+        
+        
+        if valid {
+            return (true, nil)
+        }
+        else {
+            return (false, errors)
+        }
+    }
     
     var leftMap = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW");
     var left = Level(map: leftMap, startingLocation: Point(3, 3))
+    left.goalValidator = {
+        var valid = true
+        var errors : [String] = []
+        
+        if left.robot.location != Point(1, 1) {
+            valid = false
+            errors.append("SwiftBot isn't at the end of the hallway")
+        }
+        
+        if left.cookies.count == 0 || !left.cookies.contains(Cookie(1, 1)) {
+            valid = false
+            errors.append("There is no cookie at the end of the hallway")
+        }
+        else if left.cookies.count > 1 {
+            valid = false
+            errors.append("There are too many cookies on the floor")
+        }
+        
+        
+        if valid {
+            return (true, nil)
+        }
+        else {
+            return (false, errors)
+        }
+    }
     
     var donutMap = Map(mapString: "WWWWWWW\nW     W\nW WWW W\nW WWW W\nW WWW W\nW     W\nWWWWWWW")
     var donut = Level(map:donutMap, startingLocation: Point(5, 5));
+    donut.goalValidator = {
+        var valid = true
+        var errors : [String] = []
+        
+        if donut.cookies.count < 4 {
+            valid = false
+            errors.append("There are too few cookies on the floor")
+        }
+        else if donut.cookies.count > 4 {
+            valid = false
+            errors.append("There are too many cookies on the floor")
+        }
+        
+        if !donut.cookies.contains(Cookie(1, 1)) {
+            valid = false
+            errors.append("There is no cookie in the upper left corner")
+        }
+        if !donut.cookies.contains(Cookie(5, 1)) {
+            valid = false
+            errors.append("There is no cookie in the upper right corner")
+        }
+        if !donut.cookies.contains(Cookie(1, 5)) {
+            valid = false
+            errors.append("There is no cookie in the lower left corner")
+        }
+        if !donut.cookies.contains(Cookie(5, 5)) {
+            valid = false
+            errors.append("There is no cookie in the lower right corner")
+        }
+        
+        
+        if valid {
+            return (true, nil)
+        }
+        else {
+            return (false, errors)
+        }
+    }
     
     var square = Level(map: Map(size: Size(10, 10)), startingLocation: Point(1, 8))
     
@@ -152,8 +242,7 @@ public func run() {
     let timer = CFRunLoopTimerCreateWithHandler(nil, CFAbsoluteTimeGetCurrent() + currentLevel.options.animationInterval, currentLevel.options.animationInterval, 0, 0, { (timer) in
         if let frame = currentFrame {
             if DEBUG {
-                var message = "Messages:\n"
-                message += "Previous Instruction: "
+                var message = "Previous Instruction: "
                 if let p = frame.previous {
                     message += functionNameForInstruction(p.instruction)
                 }
@@ -196,6 +285,23 @@ public func run() {
         else {
             CFRunLoopTimerInvalidate(timer)
             
+            if frames != nil {
+                if let validator = currentLevel.goalValidator {
+                    let (success, possibleErrors) = validator()
+                    if success {
+                        textView.text = textView.text + "Complete!!!"
+                    }
+                    else {
+                        let errors = possibleErrors!
+                        var errorString = "Hmmm...not quite there yet:"
+                        for error in errors {
+                            errorString += "\n  - " + error
+                        }
+                        textView.text = textView.text + errorString
+                    }
+                }
+            }
+            
             // TODO: This is kind of a hack-y way to make this work. Fix.
             // Call tearDown() after a 1 second pause to give the run loop enough
             // time to draw the final frame.
@@ -232,7 +338,6 @@ public func setup(page: Int) {
     textView.backgroundColor = UIColor(white: 0.2, alpha: 1.0)
     textView.textColor = UIColor(white:1.0, alpha: 1.0)
     textView.font = UIFont(name: "Menlo", size: 12.0)
-    textView.text = "Messages:\n"
     
     XCPlaygroundPage.currentPage.liveView = ({
         let viewFrame = CGRectMake(robotView.bounds.origin.x,

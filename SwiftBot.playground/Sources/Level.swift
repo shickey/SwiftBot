@@ -5,12 +5,6 @@ struct Robot {
     var facing : Direction = .North
 }
 
-struct Goal {
-    var robotLocation : Point?
-    var robotOrientation : Direction?
-    var cookies : Set<Cookie>?
-}
-
 typealias Cookie = Point
 
 struct LevelOptions {
@@ -26,6 +20,8 @@ public class Level {
     var path : [Point] = []
     
     var options : LevelOptions = LevelOptions()
+    
+    var goalValidator : (() -> (Bool, [String]?))?
     
     public init(map newMap: Map) {
         map = newMap
@@ -62,25 +58,6 @@ func randomlyPlaceRobot(level: Level) {
         tile = map.tiles[y][x]
     }
     moveRobot(level, Point(x, y))
-}
-
-func levelMatchesGoal(level: Level, _ goal: Goal) -> Bool {
-    if let robotLocation = goal.robotLocation {
-        if robotLocation != level.robot.location {
-            return false
-        }
-    }
-    if let robotOrientation = goal.robotOrientation {
-        if robotOrientation != level.robot.facing {
-            return false
-        }
-    }
-    if let cookies = goal.cookies {
-        if cookies != level.cookies {
-            return false
-        }
-    }
-    return true
 }
 
 
