@@ -231,10 +231,10 @@ public func run() {
             print("    " + functionNameForInstruction(framesToPrint.instruction))
             framesToPrint = framesToPrint.next
         }
-        print()
+        print("")
         print("Final Level State:\n")
         print(levelCopy) // Print final state of map for debugging
-        print()
+        print("")
     }
     
     var currentFrame : ExecutionFrame? = frames
