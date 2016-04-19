@@ -103,11 +103,55 @@ var levels : [Level] = ({
         }
     }
     
+    var conditionalsMap = Map(mapString: "WWWWWWW\nWWW WWW\nWWW WWW\nWWW WWW\nWWW WWW\nWWWWWWW")
+    var conditionalsCookies : Set<Cookie> = ({
+        
+        var cookies : Set<Cookie> = [
+            Cookie(3, 1),
+            Cookie(3, 2),
+            Cookie(3, 3),
+            Cookie(3, 4)
+        ]
+        
+        let numCookiesToDelete = arc4random_uniform(UInt32(5))
+        
+        for _ in 0..<numCookiesToDelete {
+            var indexToDelete = arc4random_uniform(UInt32(cookies.count))
+            cookies.removeAtIndex(cookies.startIndex.advancedBy(Int(indexToDelete)))
+        }
+        
+        return cookies
+        
+    })()
+    var conditionals = Level(map: lineMap, startingLocation: Point(3, 4))
+    conditionals.cookies = conditionalsCookies
+    conditionals.goalValidator = {
+        var valid = true
+        var errors : [String] = []
+        
+        if conditionals.cookies.count > 0 {
+            valid = false
+            errors.append("There are still cookies on the floor!")
+        }
+        if conditionals.robot.location != Point(3, 1) {
+            valid = false
+            errors.append("SwiftBot isn't at the end of the hallway")
+        }
+        
+        if valid {
+            return (true, nil)
+        }
+        else {
+            return (false, errors)
+        }
+        
+    }
+    
     var square = Level(map: Map(size: Size(10, 10)), startingLocation: Point(1, 8))
     
     var maze = Level(map: Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW"))
     
-    return [line, left, donut, square, maze]
+    return [line, left, donut, conditionals, square, maze]
 })()
 
 public var currentLevel = levels[0]

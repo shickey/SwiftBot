@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' auto-termination-delay='5' display-mode='rendered' executeOnSourceChanges='false'>
+<playground version='6.0' target-platform='ios' auto-termination-delay='5' display-mode='rendered'>
     <pages>
         <page name='Page 1 - Intro'/>
         <page name='Page 2 - Turning Left'/>
         <page name='Page 3 - More Complex'/>
         <page name='Page 4 - Removing Redudancies'/>
+        <page name='Page 5 - Sensing Cookies'/>
     </pages>
 </playground>
