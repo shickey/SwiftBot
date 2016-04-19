@@ -4,15 +4,14 @@ import XCPlayground
 let DEBUG = true
 
 var levels : [Level] = ({
-    var lineMap = Map(mapString: "WWW\nW W\nW W\nW W\nW W\nWWW")
-    var line = Level(map: lineMap, startingLocation: Point(1, 4))
+    var lineMap = Map(mapString: "WWWWW\nWW WW\nWW WW\nWW WW\nWW WW\nWWWWW")
+    var line = Level(map: lineMap, startingLocation: Point(2, 4))
     
     var leftMap = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW");
     var left = Level(map: leftMap, startingLocation: Point(3, 3))
     
     var donutMap = Map(mapString: "WWWWWWW\nW     W\nW WWW W\nW WWW W\nW WWW W\nW     W\nWWWWWWW")
     var donut = Level(map:donutMap, startingLocation: Point(5, 5));
-    donut.options.smokeTrailsEnabled = true
     
     var square = Level(map: Map(size: Size(10, 10)), startingLocation: Point(1, 8))
     
@@ -23,7 +22,8 @@ var levels : [Level] = ({
 
 public var currentLevel = levels[0]
 
-public var view : RobotView!
+public var robotView : RobotView!
+public var textView : UITextView!
 
 
 let errorFunc = {
@@ -151,15 +151,37 @@ public func run() {
     
     let timer = CFRunLoopTimerCreateWithHandler(nil, CFAbsoluteTimeGetCurrent() + currentLevel.options.animationInterval, currentLevel.options.animationInterval, 0, 0, { (timer) in
         if let frame = currentFrame {
+            if DEBUG {
+                var message = "Messages:\n"
+                message += "Previous Instruction: "
+                if let p = frame.previous {
+                    message += functionNameForInstruction(p.instruction)
+                }
+                else {
+                    message += "(nil)"
+                }
+                message += "\nThis Instruction: " + functionNameForInstruction(frame.instruction) + "\n\n"
+                textView.text = message
+            }
             let result = executeFrameOnLevel(frame, level: currentLevel)
             if result.error != nil {
                 switch result.error! {
                 case .CannotMoveIntoWall:
-                    print("ERROR: SwiftBot cannot move into a wall!")
+                    if DEBUG {
+                        print("ERROR: SwiftBot cannot move into a wall!")
+                    }
+                    textView.text = textView.text + "ERROR: SwiftBot cannot move into a wall!"
+                    
                 case .NoCookieToPickup:
-                    print("ERROR: There's no cookie for SwiftBot to pickup!")
+                    if DEBUG {
+                        print("ERROR: There's no cookie for SwiftBot to pickup!")
+                    }
+                    textView.text = textView.text + "ERROR: There's no cookie for SwiftBot to pickup!"
                 case .CannotStackCookies:
-                    print("ERROR: UNSTABLE COOKIE STACK! SwiftBot can place a cookie on another cookie!")
+                    if DEBUG {
+                        print("ERROR: UNSTABLE COOKIE STACK! SwiftBot cannot place a cookie on another cookie!")
+                    }
+                    textView.text = textView.text + "ERROR: UNSTABLE COOKIE STACK! SwiftBot cannot place a cookie on another cookie!"
                 }
             }
             
@@ -168,7 +190,7 @@ public func run() {
                 print(result)
             }
             
-            view.setNeedsDisplay()
+            robotView.setNeedsDisplay()
             currentFrame = frame.next
         }
         else {
@@ -202,10 +224,26 @@ public func setup(page: Int) {
         multiplier = 25.0
     }
     
-    view = RobotView(frame: CGRectMake(0, 0, CGFloat(mapSize.width) * multiplier, CGFloat(mapSize.height) * multiplier))
-    view.level = currentLevel
+    robotView = RobotView(frame: CGRectMake(0, 0, CGFloat(mapSize.width) * multiplier, CGFloat(mapSize.height) * multiplier))
+    robotView.level = currentLevel
     
-    XCPlaygroundPage.currentPage.liveView = view
+    let textHeight : CGFloat = 100.0
+    textView = UITextView(frame: CGRectMake(0, robotView.bounds.size.height, robotView.bounds.size.width, textHeight))
+    textView.backgroundColor = UIColor(white: 0.2, alpha: 1.0)
+    textView.textColor = UIColor(white:1.0, alpha: 1.0)
+    textView.font = UIFont(name: "Menlo", size: 12.0)
+    textView.text = "Messages:\n"
+    
+    XCPlaygroundPage.currentPage.liveView = ({
+        let viewFrame = CGRectMake(robotView.bounds.origin.x,
+                                      robotView.bounds.origin.y,
+                                      robotView.bounds.size.width,
+                                      robotView.bounds.size.height + textHeight);
+        let view = UIView(frame: viewFrame)
+        view.addSubview(robotView)
+        view.addSubview(textView)
+        return view
+    })()
 }
 
 func tearDown() {
