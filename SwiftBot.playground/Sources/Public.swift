@@ -239,6 +239,8 @@ public func run() {
     
     var currentFrame : ExecutionFrame? = frames
     
+    var generatedError = false
+    
     let timer = CFRunLoopTimerCreateWithHandler(nil, CFAbsoluteTimeGetCurrent() + currentLevel.options.animationInterval, currentLevel.options.animationInterval, 0, 0, { (timer) in
         if let frame = currentFrame {
             if DEBUG {
@@ -254,6 +256,7 @@ public func run() {
             }
             let result = executeFrameOnLevel(frame, level: currentLevel)
             if result.error != nil {
+                generatedError = true
                 switch result.error! {
                 case .CannotMoveIntoWall:
                     if DEBUG {
@@ -285,7 +288,7 @@ public func run() {
         else {
             CFRunLoopTimerInvalidate(timer)
             
-            if frames != nil {
+            if frames != nil && !generatedError {
                 if let validator = currentLevel.goalValidator {
                     let (success, possibleErrors) = validator()
                     if success {
