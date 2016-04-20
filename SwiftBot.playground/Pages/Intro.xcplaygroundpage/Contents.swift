@@ -65,12 +65,9 @@ instructions = {
     // to get SwiftBot to move to the end of the hallway
     // and drop a cookie
     //
-    // WRITE INSTRUCTIONS HERE:
+    // WRITE INSTRUCTIONS BELOW THIS LINE
     
-    goForward()
-    goForward()
-    goForward()
-    placeCookie()
+    
     
     
     

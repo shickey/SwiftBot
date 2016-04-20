@@ -14,9 +14,10 @@ func turnRight() {
     
     // Write the SwiftBot instructions here
     // that will make SwiftBot turn to the right
-    turnLeft()
-    turnLeft()
-    turnLeft()
+    
+    
+    
+    
     
 }
 
