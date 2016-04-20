@@ -1,6 +1,6 @@
 //: [Previous](@previous)
 
-setup(3)
+setup(4)
 
 /*:
 
@@ -38,7 +38,6 @@ instructions = {
     //
     // Your solution should work no matter
     // how many cookies there are!
-    
     
     
     

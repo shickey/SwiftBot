@@ -67,7 +67,10 @@ instructions = {
     //
     // WRITE INSTRUCTIONS HERE:
     
-    
+    goForward()
+    goForward()
+    goForward()
+    placeCookie()
     
     
     

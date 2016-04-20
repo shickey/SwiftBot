@@ -1,6 +1,6 @@
 //: [Previous](@previous)
 
-setup(2)
+setup(3)
 
 /*:
  
@@ -47,7 +47,12 @@ func placeCookieAndMoveToNextCorner() {
     // tell SwiftBot to place a cookie, move to
     // the next corner, and turn left:
     
-    
+    placeCookie()
+    goForward()
+    goForward()
+    goForward()
+    goForward()
+    turnLeft()
     
 }
 
@@ -58,7 +63,10 @@ instructions = {
     // command 4 times to tell SwiftBot to complete
     // the whole map. Write those instructions here:
     
-    
+    placeCookieAndMoveToNextCorner()
+    placeCookieAndMoveToNextCorner()
+    placeCookieAndMoveToNextCorner()
+    placeCookieAndMoveToNextCorner()
 }
 
 //: [Next](@next)

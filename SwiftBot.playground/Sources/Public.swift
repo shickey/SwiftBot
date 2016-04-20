@@ -62,6 +62,35 @@ var levels : [Level] = ({
         }
     }
     
+    var rightMap = Map(mapString: "WWWWW\nW   W\nW WWW\nW WWW\nWWWWW")
+    var right = Level(map: rightMap, startingLocation: Point(1, 3))
+    right.goalValidator = {
+        var valid = true
+        var errors : [String] = []
+        
+        if right.robot.location != Point(3, 1) {
+            valid = false
+            errors.append("SwiftBot isn't at the end of the hallway")
+        }
+        
+        if right.cookies.count == 0 || !right.cookies.contains(Cookie(3, 1)) {
+            valid = false
+            errors.append("There is no cookie at the end of the hallway")
+        }
+        else if right.cookies.count > 1 {
+            valid = false
+            errors.append("There are too many cookies on the floor")
+        }
+        
+        
+        if valid {
+            return (true, nil)
+        }
+        else {
+            return (false, errors)
+        }
+    }
+    
     var donutMap = Map(mapString: "WWWWWWW\nW     W\nW WWW W\nW WWW W\nW WWW W\nW     W\nWWWWWWW")
     var donut = Level(map:donutMap, startingLocation: Point(5, 5));
     donut.goalValidator = {
@@ -151,7 +180,7 @@ var levels : [Level] = ({
     
     var maze = Level(map: Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW"))
     
-    return [line, left, donut, conditionals, square, maze]
+    return [line, left, right, donut, conditionals, square, maze]
 })()
 
 public var currentLevel = levels[0]
