@@ -223,30 +223,21 @@ public func run() {
     
     let levelCopy = currentLevel.copy()
     var encounteredError = false
-    var frames : ExecutionFrame! = nil
-    
-    func addFrame(frame: ExecutionFrame) {
-        if frames == nil {
-            frames = frame
-        }
-        else {
-            frames.append(frame)
-        }
-    }
+    var executionStack = ExecutionStack()
     
     canGoForward = {
         if encounteredError { return false }
-        let frame = ExecutionFrame(instruction: .CanGoForward)
-        let result = executeFrameOnLevel(frame, level: levelCopy)
-        addFrame(frame)
+        let frame = ExecutionFrame(.CanGoForward)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(frame, executionStack)
         return result.sensingResult!
     }
     
     goForward = {
         if encounteredError { return }
-        let frame = ExecutionFrame(instruction: .GoForward)
-        let result = executeFrameOnLevel(frame, level: levelCopy)
-        addFrame(ExecutionFrame(instruction: .GoForward))
+        let frame = ExecutionFrame(.GoForward)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(ExecutionFrame(.GoForward), executionStack)
         if !result.success {
             encounteredError = true
         }
@@ -254,24 +245,24 @@ public func run() {
     
     turnLeft = {
         if encounteredError { return }
-        let frame = ExecutionFrame(instruction: .TurnLeft)
-        let result = executeFrameOnLevel(frame, level: levelCopy)
-        addFrame(frame)
+        let frame = ExecutionFrame(.TurnLeft)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(frame, executionStack)
     }
     
     senseCookie = {
         if encounteredError { return false }
-        let frame = ExecutionFrame(instruction: .SenseCookie)
-        let result = executeFrameOnLevel(frame, level: levelCopy)
-        addFrame(frame)
+        let frame = ExecutionFrame(.SenseCookie)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(frame, executionStack)
         return result.sensingResult!
     }
     
     placeCookie = {
         if encounteredError { return }
-        let frame = ExecutionFrame(instruction: .PlaceCookie)
-        let result = executeFrameOnLevel(frame, level: levelCopy)
-        addFrame(ExecutionFrame(instruction: .PlaceCookie))
+        let frame = ExecutionFrame(.PlaceCookie)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(ExecutionFrame(.PlaceCookie), executionStack)
         if !result.success {
             encounteredError = true
         }
@@ -279,9 +270,9 @@ public func run() {
     
     pickupCookie = {
         if encounteredError { return }
-        let frame = ExecutionFrame(instruction: .PickupCookie)
-        let result = executeFrameOnLevel(frame, level: levelCopy)
-        addFrame(ExecutionFrame(instruction: .PickupCookie))
+        let frame = ExecutionFrame(.PickupCookie)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(ExecutionFrame(.PickupCookie), executionStack)
         if !result.success {
             encounteredError = true
         }
@@ -299,10 +290,10 @@ public func run() {
     
     if DEBUG {
         print("Execution log:")
-        var framesToPrint = frames
-        while framesToPrint != nil {
-            print("    " + functionNameForInstruction(framesToPrint.instruction))
-            framesToPrint = framesToPrint.next
+        var frameToPrint = executionStack.first
+        while frameToPrint != nil {
+            print("    " + functionNameForInstruction(frameToPrint.instruction))
+            frameToPrint = frameToPrint.next
         }
         print("")
         print("Final Level State:\n")
@@ -310,7 +301,7 @@ public func run() {
         print("")
     }
     
-    var currentFrame : ExecutionFrame? = frames
+    var currentFrame = executionStack.first
     
     var generatedError = false
     
@@ -327,7 +318,7 @@ public func run() {
                 message += "\nThis Instruction: " + functionNameForInstruction(frame.instruction) + "\n\n"
                 textView.text = message
             }
-            let result = executeFrameOnLevel(frame, level: currentLevel)
+            let result = executeFrameOnLevel(frame, currentLevel)
             if result.error != nil {
                 generatedError = true
                 switch result.error! {
@@ -361,7 +352,7 @@ public func run() {
         else {
             CFRunLoopTimerInvalidate(timer)
             
-            if frames != nil && !generatedError {
+            if executionStack.first != nil && !generatedError {
                 if let validator = currentLevel.goalValidator {
                     let (success, possibleErrors) = validator()
                     if success {

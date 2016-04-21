@@ -28,6 +28,22 @@ func functionNameForInstruction(instruction: RobotInstruction) -> String {
     }
 }
 
+class ExecutionStack {
+    var first : ExecutionFrame! = nil
+    var last : ExecutionFrame! = nil
+}
+
+func appendFrameToStack(frame: ExecutionFrame, _ stack: ExecutionStack) {
+    if stack.first == nil {
+        stack.first = frame
+        stack.last = frame
+    }
+    else {
+        stack.last.next = frame
+        stack.last = frame
+    }
+}
+
 class ExecutionFrame {
     
     let instruction : RobotInstruction
@@ -35,7 +51,7 @@ class ExecutionFrame {
     var previous : ExecutionFrame? = nil
     var next : ExecutionFrame? = nil
     
-    init(instruction newInstruction: RobotInstruction) {
+    init(_ newInstruction: RobotInstruction) {
         instruction = newInstruction
     }
     
@@ -85,7 +101,7 @@ struct ExecutionResult {
     let sensingResult : Bool?
 }
 
-func executeFrameOnLevel(frame: ExecutionFrame, level: Level) -> ExecutionResult {
+func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResult {
     
     switch frame.instruction {
     case .CanGoForward:
