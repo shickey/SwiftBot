@@ -21,7 +21,7 @@ public class Level {
     
     var options : LevelOptions = LevelOptions()
     
-    var goalValidator : (() -> (Bool, [String]?))?
+    var goalValidator : ((Level) -> (Bool, [String]?))?
     
     public init(map newMap: Map) {
         map = newMap
@@ -61,6 +61,16 @@ func randomlyPlaceRobot(level: Level) {
 }
 
 
+/*
+ * Validation
+ */
+
+func validateLevel(level: Level) -> (Bool, [String]?) {
+    if let validator = level.goalValidator {
+        return validator(level)
+    }
+    return (true, nil) // If a level doesn't have a validator, it's valid by default
+}
     
     
 /*

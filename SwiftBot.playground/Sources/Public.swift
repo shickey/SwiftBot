@@ -6,20 +6,20 @@ let DEBUG = false
 var levels : [Level] = ({
     var lineMap = Map(mapString: "WWWWWWW\nWWW WWW\nWWW WWW\nWWW WWW\nWWW WWW\nWWWWWWW")
     var line = Level(map: lineMap, startingLocation: Point(3, 4))
-    line.goalValidator = {
+    line.goalValidator = { (level) in
         var valid = true
         var errors : [String] = []
         
-        if line.robot.location != Point(3, 1) {
+        if level.robot.location != Point(3, 1) {
             valid = false
             errors.append("SwiftBot isn't at the end of the hallway")
         }
         
-        if line.cookies.count == 0 || !line.cookies.contains(Cookie(3, 1)) {
+        if level.cookies.count == 0 || !level.cookies.contains(Cookie(3, 1)) {
             valid = false
             errors.append("There is no cookie at the end of the hallway")
         }
-        else if line.cookies.count > 1 {
+        else if level.cookies.count > 1 {
             valid = false
             errors.append("There are too many cookies on the floor")
         }
@@ -35,20 +35,20 @@ var levels : [Level] = ({
     
     var leftMap = Map(mapString: "WWWWW\nW   W\nWWW W\nWWW W\nWWWWW");
     var left = Level(map: leftMap, startingLocation: Point(3, 3))
-    left.goalValidator = {
+    left.goalValidator = { (level) in
         var valid = true
         var errors : [String] = []
         
-        if left.robot.location != Point(1, 1) {
+        if level.robot.location != Point(1, 1) {
             valid = false
             errors.append("SwiftBot isn't at the end of the hallway")
         }
         
-        if left.cookies.count == 0 || !left.cookies.contains(Cookie(1, 1)) {
+        if level.cookies.count == 0 || !level.cookies.contains(Cookie(1, 1)) {
             valid = false
             errors.append("There is no cookie at the end of the hallway")
         }
-        else if left.cookies.count > 1 {
+        else if level.cookies.count > 1 {
             valid = false
             errors.append("There are too many cookies on the floor")
         }
@@ -64,20 +64,20 @@ var levels : [Level] = ({
     
     var rightMap = Map(mapString: "WWWWW\nW   W\nW WWW\nW WWW\nWWWWW")
     var right = Level(map: rightMap, startingLocation: Point(1, 3))
-    right.goalValidator = {
+    right.goalValidator = { (level) in
         var valid = true
         var errors : [String] = []
         
-        if right.robot.location != Point(3, 1) {
+        if level.robot.location != Point(3, 1) {
             valid = false
             errors.append("SwiftBot isn't at the end of the hallway")
         }
         
-        if right.cookies.count == 0 || !right.cookies.contains(Cookie(3, 1)) {
+        if level.cookies.count == 0 || !level.cookies.contains(Cookie(3, 1)) {
             valid = false
             errors.append("There is no cookie at the end of the hallway")
         }
-        else if right.cookies.count > 1 {
+        else if level.cookies.count > 1 {
             valid = false
             errors.append("There are too many cookies on the floor")
         }
@@ -93,32 +93,32 @@ var levels : [Level] = ({
     
     var donutMap = Map(mapString: "WWWWWWW\nW     W\nW WWW W\nW WWW W\nW WWW W\nW     W\nWWWWWWW")
     var donut = Level(map:donutMap, startingLocation: Point(5, 5));
-    donut.goalValidator = {
+    donut.goalValidator = { (level) in
         var valid = true
         var errors : [String] = []
         
-        if donut.cookies.count < 4 {
+        if level.cookies.count < 4 {
             valid = false
             errors.append("There are too few cookies on the floor")
         }
-        else if donut.cookies.count > 4 {
+        else if level.cookies.count > 4 {
             valid = false
             errors.append("There are too many cookies on the floor")
         }
         
-        if !donut.cookies.contains(Cookie(1, 1)) {
+        if !level.cookies.contains(Cookie(1, 1)) {
             valid = false
             errors.append("There is no cookie in the upper left corner")
         }
-        if !donut.cookies.contains(Cookie(5, 1)) {
+        if !level.cookies.contains(Cookie(5, 1)) {
             valid = false
             errors.append("There is no cookie in the upper right corner")
         }
-        if !donut.cookies.contains(Cookie(1, 5)) {
+        if !level.cookies.contains(Cookie(1, 5)) {
             valid = false
             errors.append("There is no cookie in the lower left corner")
         }
-        if !donut.cookies.contains(Cookie(5, 5)) {
+        if !level.cookies.contains(Cookie(5, 5)) {
             valid = false
             errors.append("There is no cookie in the lower right corner")
         }
@@ -154,15 +154,15 @@ var levels : [Level] = ({
     })()
     var conditionals = Level(map: lineMap, startingLocation: Point(3, 4))
     conditionals.cookies = conditionalsCookies
-    conditionals.goalValidator = {
+    conditionals.goalValidator = { (level) in
         var valid = true
         var errors : [String] = []
         
-        if conditionals.cookies.count > 0 {
+        if level.cookies.count > 0 {
             valid = false
             errors.append("There are still cookies on the floor!")
         }
-        if conditionals.robot.location != Point(3, 1) {
+        if level.robot.location != Point(3, 1) {
             valid = false
             errors.append("SwiftBot isn't at the end of the hallway")
         }
@@ -353,19 +353,17 @@ public func run() {
             CFRunLoopTimerInvalidate(timer)
             
             if executionStack.first != nil && !generatedError {
-                if let validator = currentLevel.goalValidator {
-                    let (success, possibleErrors) = validator()
-                    if success {
-                        textView.text = textView.text + "Complete!!!"
+                let (success, possibleErrors) = validateLevel(currentLevel)
+                if success {
+                    textView.text = textView.text + "Complete!!!"
+                }
+                else {
+                    let errors = possibleErrors!
+                    var errorString = "Hmmm...not quite there yet:"
+                    for error in errors {
+                        errorString += "\n  - " + error
                     }
-                    else {
-                        let errors = possibleErrors!
-                        var errorString = "Hmmm...not quite there yet:"
-                        for error in errors {
-                            errorString += "\n  - " + error
-                        }
-                        textView.text = textView.text + errorString
-                    }
+                    textView.text = textView.text + errorString
                 }
             }
             
