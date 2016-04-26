@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='ios' auto-termination-delay='5' display-mode='raw'>
+<playground version='6.0' target-platform='ios' auto-termination-delay='5' display-mode='rendered'>
     <pages>
         <page name='Sensing Cookies'/>
         <page name='Invert Cookies'/>
         <page name='Variable Length Hallway'/>
+        <page name='Putting It All Together'/>
     </pages>
 </playground>

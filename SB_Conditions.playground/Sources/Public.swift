@@ -97,7 +97,7 @@ var levels : [Level] = ({
         
         var str = "WWWWWWW\nWWW WWW\n"
         
-        var rows = arc4random_uniform(UInt32(6))
+        var rows = arc4random_uniform(UInt32(8))
         for _ in 0..<rows {
             str += "WWW WWW\n"
         }
@@ -107,7 +107,7 @@ var levels : [Level] = ({
         
     })()
     let randomHallwayMap = Map(mapString:randomLengthHallwayMapString)
-    let randomHallway = Level(map: randomHallwayMap, startingLocation:Point(3, randomHallwayMap.size.height - 2))
+    let randomHallway = Level(map: randomHallwayMap, startingLocation: Point(3, randomHallwayMap.size.height - 2))
     randomHallway.goalValidator = { (level) in
         var valid = true
         var errors : [String] = []
@@ -137,9 +137,69 @@ var levels : [Level] = ({
     
     
     
+    var randomInvertMap = Map(mapString:randomLengthHallwayMapString)
+    var randomInvertCookies : Set<Cookie> = ({
+        
+        var cookies : Set<Cookie> = []
+        
+        for i in 1...randomInvertMap.size.height - 2 {
+            cookies.insert(Cookie(3, i))
+        }
+        
+        let numCookiesToDelete = arc4random_uniform(UInt32(randomInvertMap.size.height - 2))
+        
+        for _ in 0..<numCookiesToDelete {
+            var indexToDelete = arc4random_uniform(UInt32(cookies.count))
+            cookies.removeAtIndex(cookies.startIndex.advancedBy(Int(indexToDelete)))
+        }
+        
+        return cookies
+        
+    })()
+    let randomInvert = Level(map: randomInvertMap, startingLocation: Point(3, randomHallwayMap.size.height - 2))
+    randomInvert.cookies = randomInvertCookies
+    randomInvert.goalValidator = { (level) in
+        var valid = true
+        var errors : [String] = []
+        
+        
+        var allCookies : Set<Cookie> = []
+        
+        for i in 1...randomInvertMap.size.height - 2 {
+            allCookies.insert(Cookie(3, i))
+        }
+        
+        if !level.cookies.isDisjointWith(randomInvertCookies) {
+            valid = false
+            errors.append("Some of the original cookies are on the floor")
+        }
+        
+        if !(level.cookies.union(randomInvertCookies) == allCookies) {
+            valid = false
+            errors.append("Some of the cookies weren't inverted properly")
+        }
+        
+        
+        
+        if level.robot.location != Point(3, 1) {
+            valid = false
+            errors.append("SwiftBot isn't at the end of the hallway")
+        }
+        
+        if valid {
+            return (true, nil)
+        }
+        else {
+            return (false, errors)
+        }
+    }
+    
+    
+    
+    
     var maze = Level(map: Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW"))
     
-    return [conditionals, invert, randomHallway]
+    return [conditionals, invert, randomHallway, randomInvert]
 })()
 
 public var currentLevel = levels[0]

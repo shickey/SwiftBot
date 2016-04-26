@@ -4,7 +4,7 @@ setup(0)
 
 # Sensing Cookies
 
-This map is just like the first one, except it starts with a **random number of cookies on the floor** (anywhere between 0 and 4).
+This map is just like the first one from last session, except it starts with a **random number of cookies on the floor** (anywhere between 0 and 4).
 
 ## Your Goal
 Clean up the cookies! At the end of your program, the map should look like:

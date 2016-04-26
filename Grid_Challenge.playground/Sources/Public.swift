@@ -177,6 +177,38 @@ var levels : [Level] = ({
     }
     
     var square = Level(map: Map(size: Size(10, 10)), startingLocation: Point(8, 8))
+    square.goalValidator = { (level) in
+        var valid = true
+        var errors : [String] = []
+        
+        var finalCookies : Set<Cookie> = []
+        for i in [1, 3, 5, 7] {
+            for j in [1, 3, 5, 7] {
+                finalCookies.insert(Cookie(i, j))
+            }
+        }
+        
+        for i in [2, 4, 6, 8] {
+            for j in [2, 4, 6, 8] {
+                finalCookies.insert(Cookie(i, j))
+            }
+        }
+        
+        print(finalCookies)
+        
+        if level.cookies != finalCookies {
+            valid = false
+            errors.append("Make sure you have alternating cookies starting with a cookie in the lower right corner")
+        }
+        
+        if valid {
+            return (true, nil)
+        }
+        else {
+            return (false, errors)
+        }
+        
+    }
     
     var maze = Level(map: Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW"))
     
