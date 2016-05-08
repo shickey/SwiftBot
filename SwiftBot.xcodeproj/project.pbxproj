@@ -1,0 +1,165 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		A398A6231CDED3840034831A /* Compile Playgrounds */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A398A6241CDED3840034831A /* Build configuration list for PBXAggregateTarget "Compile Playgrounds" */;
+			buildPhases = (
+				A398A6341CDED4EB0034831A /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Compile Playgrounds";
+			productName = "Compile Playgrounds";
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXFileReference section */
+		A398A63D1CDED9CD0034831A /* Grid.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Grid.playground; sourceTree = "<group>"; };
+		A398A63E1CDED9CD0034831A /* Conditions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Conditions.playground; sourceTree = "<group>"; };
+		A398A63F1CDED9CD0034831A /* Intro.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Intro.playground; sourceTree = "<group>"; };
+		A398A6401CDED9D90034831A /* Execution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Execution.swift; sourceTree = "<group>"; };
+		A398A6411CDED9D90034831A /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		A398A6421CDED9D90034831A /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		A398A6431CDED9D90034831A /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		A398A6441CDED9D90034831A /* Public.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Public.swift; sourceTree = "<group>"; };
+		A398A6451CDED9D90034831A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		A398A6461CDEDE400034831A /* Midpoint.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Midpoint.playground; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		A398A61A1CDED3460034831A = {
+			isa = PBXGroup;
+			children = (
+				A398A63B1CDED9980034831A /* SwiftBot */,
+				A398A63C1CDED9A40034831A /* Playgrounds */,
+			);
+			sourceTree = "<group>";
+		};
+		A398A63B1CDED9980034831A /* SwiftBot */ = {
+			isa = PBXGroup;
+			children = (
+				A398A6401CDED9D90034831A /* Execution.swift */,
+				A398A6411CDED9D90034831A /* Geometry.swift */,
+				A398A6421CDED9D90034831A /* Level.swift */,
+				A398A6431CDED9D90034831A /* Map.swift */,
+				A398A6441CDED9D90034831A /* Public.swift */,
+				A398A6451CDED9D90034831A /* View.swift */,
+			);
+			path = SwiftBot;
+			sourceTree = "<group>";
+		};
+		A398A63C1CDED9A40034831A /* Playgrounds */ = {
+			isa = PBXGroup;
+			children = (
+				A398A63F1CDED9CD0034831A /* Intro.playground */,
+				A398A63E1CDED9CD0034831A /* Conditions.playground */,
+				A398A6461CDEDE400034831A /* Midpoint.playground */,
+				A398A63D1CDED9CD0034831A /* Grid.playground */,
+			);
+			path = Playgrounds;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		A398A61B1CDED3460034831A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				TargetAttributes = {
+					A398A6231CDED3840034831A = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = A398A61E1CDED3460034831A /* Build configuration list for PBXProject "SwiftBot" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A398A61A1CDED3460034831A;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A398A6231CDED3840034831A /* Compile Playgrounds */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A398A6341CDED4EB0034831A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "cd \"$PROJECT_DIR/Playgrounds\";\nfor i in *.playground; do\n  for j in ../SwiftBot/*.swift; do\n    cp $j $i/Sources\n  done\ndone";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A398A61F1CDED3460034831A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		A398A6201CDED3460034831A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		A398A6251CDED3840034831A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A398A6261CDED3840034831A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A398A61E1CDED3460034831A /* Build configuration list for PBXProject "SwiftBot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A398A61F1CDED3460034831A /* Debug */,
+				A398A6201CDED3460034831A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A398A6241CDED3840034831A /* Build configuration list for PBXAggregateTarget "Compile Playgrounds" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A398A6251CDED3840034831A /* Debug */,
+				A398A6261CDED3840034831A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A398A61B1CDED3460034831A /* Project object */;
+}
