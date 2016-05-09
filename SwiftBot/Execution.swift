@@ -89,7 +89,7 @@ extension ExecutionFrame : CustomStringConvertible {
     }
 }
 
-enum ExecutionError {
+enum RobotError {
     case CannotMoveIntoWall
     case NoCookieToPickup
     case CannotStackCookies
@@ -97,7 +97,7 @@ enum ExecutionError {
 
 struct ExecutionResult {
     let success : Bool
-    let error : ExecutionError?
+    let error : RobotError?
     let sensingResult : Bool?
 }
 
@@ -110,28 +110,28 @@ func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResu
         
     case .GoForward:
         if !(moveRobot(level)) {
-            return ExecutionResult(success: false,error: .CannotMoveIntoWall, sensingResult: nil)
+            return ExecutionResult(success: false, error: .CannotMoveIntoWall, sensingResult: nil)
         }
         
     case .TurnLeft:
         turnRobotLeft(level)
-        return ExecutionResult(success: true,error: nil, sensingResult: nil)
+        return ExecutionResult(success: true, error: nil, sensingResult: nil)
         
     case .SenseCookie:
         let result = robotSenseCookie(level)
-        return ExecutionResult(success: true,error: nil, sensingResult: result)
+        return ExecutionResult(success: true, error: nil, sensingResult: result)
         
     case .PlaceCookie:
         if !(robotPlaceCookie(level)) {
-            return ExecutionResult(success: false,error: .CannotStackCookies, sensingResult: nil)
+            return ExecutionResult(success: false, error: .CannotStackCookies, sensingResult: nil)
         }
         
     case .PickupCookie:
         if !(robotPickupCookie(level)) {
-            return ExecutionResult(success: false,error: .NoCookieToPickup, sensingResult: nil)
+            return ExecutionResult(success: false, error: .NoCookieToPickup, sensingResult: nil)
         }
         
     }
     
-    return ExecutionResult(success: true,error: nil, sensingResult: nil)
+    return ExecutionResult(success: true, error: nil, sensingResult: nil)
 }
