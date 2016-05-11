@@ -1,5 +1,3 @@
-import Foundation
-
 struct Robot {
     var location : Point = Point(0,0)
     var facing : Direction = .North
@@ -23,18 +21,13 @@ public class Level {
     
     var goalValidator : ((Level) -> (Bool, [String]?))?
     
-    public init(map newMap: Map) {
-        map = newMap
-        randomlyPlaceRobot(self)
-    }
-    
     public init(map newMap: Map, startingLocation: Point) {
         map = newMap
         moveRobot(self, startingLocation)
     }
     
     public func copy() -> Level {
-        let c = Level(map: map)
+        let c = Level(map: map, startingLocation: robot.location)
         c.cookies = cookies
         c.robot = robot
         c.options = options
@@ -42,24 +35,6 @@ public class Level {
     }
     
 }
-
-/*
- * MARK: Level Functions
- */
-
-func randomlyPlaceRobot(level: Level) {
-    let map = level.map
-    var x = Int(arc4random_uniform(UInt32(map.size.width)))
-    var y = Int(arc4random_uniform(UInt32(map.size.height)))
-    var tile = map.tiles[y][x]
-    while tile == .Wall {
-        x = Int(arc4random_uniform(UInt32(map.size.width)))
-        y = Int(arc4random_uniform(UInt32(map.size.height)))
-        tile = map.tiles[y][x]
-    }
-    moveRobot(level, Point(x, y))
-}
-
 
 /*
  * Validation

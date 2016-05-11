@@ -1,5 +1,3 @@
-import Foundation
-
 enum MapTile : Character, Equatable {
     case Wall = "W"
     case Space = " "

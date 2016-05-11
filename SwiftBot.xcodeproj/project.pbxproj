@@ -26,10 +26,10 @@
 		A3CBABE81CE02503002295C9 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6411CDED9D90034831A /* Geometry.swift */; };
 		A3CBABE91CE02503002295C9 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6421CDED9D90034831A /* Level.swift */; };
 		A3CBABEA1CE02503002295C9 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6431CDED9D90034831A /* Map.swift */; };
-		A3CBABEC1CE02503002295C9 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6451CDED9D90034831A /* View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7DA3F2F31CE3A0CF00AE5B53 /* RobotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotView.swift; sourceTree = "<group>"; };
 		A398A63D1CDED9CD0034831A /* Grid.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Grid.playground; sourceTree = "<group>"; };
 		A398A63E1CDED9CD0034831A /* Conditions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Conditions.playground; sourceTree = "<group>"; };
 		A398A63F1CDED9CD0034831A /* Intro.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Intro.playground; sourceTree = "<group>"; };
@@ -37,8 +37,7 @@
 		A398A6411CDED9D90034831A /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 		A398A6421CDED9D90034831A /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		A398A6431CDED9D90034831A /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
-		A398A6441CDED9D90034831A /* Public.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Public.swift; sourceTree = "<group>"; };
-		A398A6451CDED9D90034831A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		A398A6441CDED9D90034831A /* PlaygroundShim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundShim.swift; sourceTree = "<group>"; };
 		A398A6461CDEDE400034831A /* Midpoint.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Midpoint.playground; sourceTree = "<group>"; };
 		A3CBABDE1CE024FA002295C9 /* SwiftBot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftBot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3CBABE11CE024FA002295C9 /* SwiftBot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftBot.h; sourceTree = "<group>"; };
@@ -56,9 +55,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7DA3F2F21CE39ACC00AE5B53 /* PlaygroundSupport */ = {
+			isa = PBXGroup;
+			children = (
+				A398A6441CDED9D90034831A /* PlaygroundShim.swift */,
+				7DA3F2F31CE3A0CF00AE5B53 /* RobotView.swift */,
+			);
+			path = PlaygroundSupport;
+			sourceTree = "<group>";
+		};
 		A398A61A1CDED3460034831A = {
 			isa = PBXGroup;
 			children = (
+				7DA3F2F21CE39ACC00AE5B53 /* PlaygroundSupport */,
 				A398A63B1CDED9980034831A /* SwiftBot */,
 				A398A63C1CDED9A40034831A /* Playgrounds */,
 				A3CBABE01CE024FA002295C9 /* SwiftBot */,
@@ -73,8 +82,6 @@
 				A398A6411CDED9D90034831A /* Geometry.swift */,
 				A398A6421CDED9D90034831A /* Level.swift */,
 				A398A6431CDED9D90034831A /* Map.swift */,
-				A398A6441CDED9D90034831A /* Public.swift */,
-				A398A6451CDED9D90034831A /* View.swift */,
 			);
 			path = SwiftBot;
 			sourceTree = "<group>";
@@ -152,7 +159,7 @@
 					};
 					A3CBABDD1CE024FA002295C9 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 4W8J8Q87W8;
+						DevelopmentTeam = 25D622UWJK;
 					};
 				};
 			};
@@ -196,7 +203,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "cd \"$PROJECT_DIR/Playgrounds\";\nfor i in *.playground; do\n  for j in ../SwiftBot/*.swift; do\n    cp $j $i/Sources\n  done\ndone";
+			shellScript = "cd \"$PROJECT_DIR/Playgrounds\";\nfor i in *.playground; do\n  for j in ../SwiftBot/*.swift; do\n    cp $j $i/Sources\n  done\n  for k in ../PlaygroundSupport/*.swift; do\n    cp $k $i/Sources\n  done\ndone";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -209,7 +216,6 @@
 				A3CBABE81CE02503002295C9 /* Geometry.swift in Sources */,
 				A3CBABE91CE02503002295C9 /* Level.swift in Sources */,
 				A3CBABEA1CE02503002295C9 /* Map.swift in Sources */,
-				A3CBABEC1CE02503002295C9 /* View.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +266,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -292,6 +299,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = local.seanhickey.SwiftBot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -319,6 +327,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -344,6 +353,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = local.seanhickey.SwiftBot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -381,6 +391,7 @@
 				A3CBABE51CE024FA002295C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

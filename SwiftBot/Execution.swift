@@ -28,19 +28,20 @@ func functionNameForInstruction(instruction: RobotInstruction) -> String {
     }
 }
 
-class ExecutionStack {
+class ExecutionQueue {
     var first : ExecutionFrame! = nil
     var last : ExecutionFrame! = nil
 }
 
-func appendFrameToStack(frame: ExecutionFrame, _ stack: ExecutionStack) {
-    if stack.first == nil {
-        stack.first = frame
-        stack.last = frame
+func appendFrameToStack(frame: ExecutionFrame, _ queue: ExecutionQueue) {
+    if queue.first == nil {
+        queue.first = frame
+        queue.last = frame
     }
     else {
-        stack.last.next = frame
-        stack.last = frame
+        queue.last.next = frame
+        frame.previous = queue.last
+        queue.last = frame
     }
 }
 
@@ -53,15 +54,6 @@ class ExecutionFrame {
     
     init(_ newInstruction: RobotInstruction) {
         instruction = newInstruction
-    }
-    
-    func append(frame: ExecutionFrame) {
-        if next == nil {
-            next = frame
-            frame.previous = self
-            return
-        }
-        next!.append(frame)
     }
 }
 
