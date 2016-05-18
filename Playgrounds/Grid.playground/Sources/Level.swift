@@ -106,6 +106,38 @@ func canMoveRobot(level: Level, _ location: Point) -> Bool {
     return true
 }
 
+func canMoveRobotLeft(level: Level) -> Bool {
+    var nextRobotLocation = level.robot.location
+    switch level.robot.facing {
+    case .North:
+        nextRobotLocation.x -= 1
+    case .West:
+        nextRobotLocation.y += 1
+    case .South:
+        nextRobotLocation.x += 1
+    case .East:
+        nextRobotLocation.y -= 1
+    }
+    
+    return canMoveRobot(level, nextRobotLocation);
+}
+
+func canMoveRobotRight(level: Level) -> Bool {
+    var nextRobotLocation = level.robot.location
+    switch level.robot.facing {
+    case .North:
+        nextRobotLocation.x += 1
+    case .West:
+        nextRobotLocation.y -= 1
+    case .South:
+        nextRobotLocation.x -= 1
+    case .East:
+        nextRobotLocation.y += 1
+    }
+    
+    return canMoveRobot(level, nextRobotLocation);
+}
+
 func robotPlaceCookie(level: Level) -> Bool {
     if robotSenseCookie(level) {
         return false

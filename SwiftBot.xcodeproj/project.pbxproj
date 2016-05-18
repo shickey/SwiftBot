@@ -30,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		7DA3F2F31CE3A0CF00AE5B53 /* RobotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotView.swift; sourceTree = "<group>"; };
+		7DA3F2F41CEB9CF900AE5B53 /* Maze.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Maze.playground; sourceTree = "<group>"; };
 		A398A63D1CDED9CD0034831A /* Grid.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Grid.playground; sourceTree = "<group>"; };
 		A398A63E1CDED9CD0034831A /* Conditions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Conditions.playground; sourceTree = "<group>"; };
 		A398A63F1CDED9CD0034831A /* Intro.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Intro.playground; sourceTree = "<group>"; };
@@ -93,6 +94,7 @@
 				A398A63E1CDED9CD0034831A /* Conditions.playground */,
 				A398A6461CDEDE400034831A /* Midpoint.playground */,
 				A398A63D1CDED9CD0034831A /* Grid.playground */,
+				7DA3F2F41CEB9CF900AE5B53 /* Maze.playground */,
 			);
 			path = Playgrounds;
 			sourceTree = "<group>";

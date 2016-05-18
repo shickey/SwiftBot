@@ -6,8 +6,8 @@ struct Robot {
 typealias Cookie = Point
 
 struct LevelOptions {
-    var animationInterval : Double = 0.25
-    var smokeTrailsEnabled : Bool = false
+    var animationInterval : Double = 0.1
+    var smokeTrailsEnabled : Bool = true
 }
 
 public class Level {

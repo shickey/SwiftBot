@@ -17,6 +17,8 @@ let errorFuncReturningBool = { () -> Bool in
 }
 
 public var canGoForward : () -> Bool = errorFuncReturningBool
+public var canGoLeft : () -> Bool = errorFuncReturningBool
+public var canGoRight : () -> Bool = errorFuncReturningBool
 public var goForward : () -> () = errorFunc
 public var turnLeft : () -> () = errorFunc
 public var senseCookie : () -> Bool = errorFuncReturningBool
@@ -46,6 +48,22 @@ public func run() {
     canGoForward = {
         if encounteredError { return false }
         let frame = ExecutionFrame(.CanGoForward)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(frame, executionQueue)
+        return result.sensingResult!
+    }
+    
+    canGoLeft = {
+        if encounteredError { return false }
+        let frame = ExecutionFrame(.CanGoLeft)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        appendFrameToStack(frame, executionQueue)
+        return result.sensingResult!
+    }
+    
+    canGoRight = {
+        if encounteredError { return false }
+        let frame = ExecutionFrame(.CanGoRight)
         let result = executeFrameOnLevel(frame, levelCopy)
         appendFrameToStack(frame, executionQueue)
         return result.sensingResult!

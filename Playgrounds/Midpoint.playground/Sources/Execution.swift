@@ -9,6 +9,8 @@ enum RobotInstruction {
     case SenseCookie
     case PlaceCookie
     case PickupCookie
+    case CanGoLeft
+    case CanGoRight
 }
 
 func functionNameForInstruction(instruction: RobotInstruction) -> String {
@@ -25,6 +27,10 @@ func functionNameForInstruction(instruction: RobotInstruction) -> String {
         return "placeCookie()"
     case .PickupCookie:
         return "pickupCookie()"
+    case .CanGoLeft:
+        return "canGoLeft()"
+    case .CanGoRight:
+        return "canGoRight()"
     }
 }
 
@@ -122,6 +128,14 @@ func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResu
         if !(robotPickupCookie(level)) {
             return ExecutionResult(success: false, error: .NoCookieToPickup, sensingResult: nil)
         }
+        
+    case .CanGoLeft:
+        let result = canMoveRobotLeft(level)
+        return ExecutionResult(success: true, error: nil, sensingResult: result)
+        
+    case .CanGoRight:
+        let result = canMoveRobotRight(level)
+        return ExecutionResult(success: true, error: nil, sensingResult: result)
         
     }
     
