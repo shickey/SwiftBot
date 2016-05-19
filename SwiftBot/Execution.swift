@@ -128,38 +128,38 @@ func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResu
     
     switch frame.instruction {
     case .CanGoForward:
-        let result = canMoveRobot(level)
+        let result = _canGoForward(level)
         return ExecutionResult(success: true, error: nil, sensingResult: result)
         
     case .GoForward:
-        if !(moveRobot(level)) {
+        if !(_goForward(level)) {
             return ExecutionResult(success: false, error: .CannotMoveIntoWall, sensingResult: nil)
         }
         
     case .TurnLeft:
-        turnRobotLeft(level)
+        _turnLeft(level)
         return ExecutionResult(success: true, error: nil, sensingResult: nil)
         
     case .SenseCookie:
-        let result = robotSenseCookie(level)
+        let result = _senseCookie(level)
         return ExecutionResult(success: true, error: nil, sensingResult: result)
         
     case .PlaceCookie:
-        if !(robotPlaceCookie(level)) {
+        if !(_placeCookie(level)) {
             return ExecutionResult(success: false, error: .CannotStackCookies, sensingResult: nil)
         }
         
     case .PickupCookie:
-        if !(robotPickupCookie(level)) {
+        if !(_pickupCookie(level)) {
             return ExecutionResult(success: false, error: .NoCookieToPickup, sensingResult: nil)
         }
         
     case .CanGoLeft:
-        let result = canMoveRobotLeft(level)
+        let result = _canGoLeft(level)
         return ExecutionResult(success: true, error: nil, sensingResult: result)
         
     case .CanGoRight:
-        let result = canMoveRobotRight(level)
+        let result = _canGoRight(level)
         return ExecutionResult(success: true, error: nil, sensingResult: result)
         
     }
@@ -305,7 +305,6 @@ class BackgroundQueuer {
     }
     
     @objc func buildQueue() {
-        print("hello threaded world!")
         instructions()
         completion()
     }

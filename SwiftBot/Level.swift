@@ -37,19 +37,7 @@ public class Level {
 }
 
 /*
- * Validation
- */
-
-func validateLevel(level: Level) -> (Bool, [String]?) {
-    if let validator = level.goalValidator {
-        return validator(level)
-    }
-    return (true, nil) // If a level doesn't have a validator, it's valid by default
-}
-    
-    
-/*
- * MARK: Robot Instruction Primatives
+ * MARK: Basic Robot Functions
  */
 
 func moveRobot(level: Level, _ location: Point) -> Bool {
@@ -59,40 +47,6 @@ func moveRobot(level: Level, _ location: Point) -> Bool {
     level.robot.location = location
     level.path.append(location)
     return true
-}
-
-func moveRobot(level: Level) -> Bool {
-    var movePosition = level.robot.location
-    switch level.robot.facing {
-    case .North:
-        movePosition.y -= 1
-    case .East:
-        movePosition.x += 1
-    case .West:
-        movePosition.x -= 1
-    case .South:
-        movePosition.y += 1
-    }
-    return moveRobot(level, movePosition)
-}
-
-func turnRobotLeft(level: Level) {
-    level.robot.facing = level.robot.facing.left
-}
-
-func canMoveRobot(level: Level) -> Bool {
-    var movePosition = level.robot.location
-    switch level.robot.facing {
-    case .North:
-        movePosition.y -= 1
-    case .East:
-        movePosition.x += 1
-    case .West:
-        movePosition.x -= 1
-    case .South:
-        movePosition.y += 1
-    }
-    return canMoveRobot(level, movePosition)
 }
 
 func canMoveRobot(level: Level, _ location: Point) -> Bool {
@@ -106,62 +60,15 @@ func canMoveRobot(level: Level, _ location: Point) -> Bool {
     return true
 }
 
-func canMoveRobotLeft(level: Level) -> Bool {
-    var nextRobotLocation = level.robot.location
-    switch level.robot.facing {
-    case .North:
-        nextRobotLocation.x -= 1
-    case .West:
-        nextRobotLocation.y += 1
-    case .South:
-        nextRobotLocation.x += 1
-    case .East:
-        nextRobotLocation.y -= 1
-    }
-    
-    return canMoveRobot(level, nextRobotLocation);
-}
+/*
+ * Validation
+ */
 
-func canMoveRobotRight(level: Level) -> Bool {
-    var nextRobotLocation = level.robot.location
-    switch level.robot.facing {
-    case .North:
-        nextRobotLocation.x += 1
-    case .West:
-        nextRobotLocation.y -= 1
-    case .South:
-        nextRobotLocation.x -= 1
-    case .East:
-        nextRobotLocation.y += 1
+func validateLevel(level: Level) -> (Bool, [String]?) {
+    if let validator = level.goalValidator {
+        return validator(level)
     }
-    
-    return canMoveRobot(level, nextRobotLocation);
-}
-
-func robotPlaceCookie(level: Level) -> Bool {
-    if robotSenseCookie(level) {
-        return false
-    }
-    level.cookies.insert(level.robot.location)
-    return true
-}
-
-func robotPickupCookie(level: Level) -> Bool {
-    if !robotSenseCookie(level) {
-        return false
-    }
-    level.cookies.remove(level.robot.location)
-    return true
-}
-
-func robotSenseCookie(level: Level) -> Bool {
-    let position = level.robot.location
-    for cookie in level.cookies {
-        if cookie == position {
-            return true
-        }
-    }
-    return false
+    return (true, nil) // If a level doesn't have a validator, it's valid by default
 }
 
 /*
