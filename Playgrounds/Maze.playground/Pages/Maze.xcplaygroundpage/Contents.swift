@@ -17,28 +17,28 @@ SwiftBot knows all its normal commands in addition to two more:
 
 setup(0)
 
+/* Uncomment this next line of code to see a trail of smoke
+ * left behind by the robot. Useful for seeing where
+ * your robot has been so far!
+ */
+
+// enableSmokeTrails()
+
+
+
+/*
+ * You can change the '50' to a number between 0 and 100
+ * to change the speed of the robot. 0 is slowest, and
+ * 100 is fastest.
+ */
+
+setSpeed(50)
+
+
+
+
 instructions = {
     
-    while !senseCookie() {
-        if canGoLeft() {
-            turnLeft()
-            goForward()
-        }
-        else if canGoForward() {
-            goForward()
-        }
-        else if canGoRight() {
-            turnLeft()
-            turnLeft()
-            turnLeft()
-            goForward()
-        }
-        else {
-            turnLeft()
-            turnLeft()
-            goForward()
-        }
-    }
-    pickupCookie()
+    
     
 }

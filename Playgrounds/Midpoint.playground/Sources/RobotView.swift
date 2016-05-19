@@ -38,16 +38,16 @@ public class RobotView : UIView {
                 }
             }
             
-            // Draw path
-            if level.options.smokeTrailsEnabled && level.path.count > 0 {
-                let alphaDelta : CGFloat = 1.0 / CGFloat(level.path.count)
-                var alpha : CGFloat = 0.0
+            // Draw smoke trails
+            if level.options.smokeTrailsEnabled && level.path.count > 1 {
+                let greyDelta : CGFloat = 0.5 / CGFloat(level.path.count)
+                var fill : CGFloat = 0.5
                 for pathComponent in level.path {
                     let origin = CGPointMake(CGFloat(pathComponent.x) * tileSize.width, CGFloat(pathComponent.y) * tileSize.height)
                     let tileRect = CGRectIntegral(CGRectMake(origin.x, origin.y, tileSize.width, tileSize.height))
-                    CGContextSetRGBFillColor(context, 0.3, 0.3, 0.3, alpha)
+                    CGContextSetGrayFillColor(context, fill, 1.0)
                     CGContextFillRect(context, tileRect)
-                    alpha += alphaDelta
+                    fill -= greyDelta
                 }
             }
             
