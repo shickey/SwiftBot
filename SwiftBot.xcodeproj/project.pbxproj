@@ -14,6 +14,7 @@
 				A398A6341CDED4EB0034831A /* ShellScript */,
 			);
 			dependencies = (
+				7DF18AD51CEE4474002083C1 /* PBXTargetDependency */,
 			);
 			name = "Compile Playgrounds";
 			productName = "Compile Playgrounds";
@@ -29,6 +30,16 @@
 		A3CBABE91CE02503002295C9 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6421CDED9D90034831A /* Level.swift */; };
 		A3CBABEA1CE02503002295C9 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6431CDED9D90034831A /* Map.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7DF18AD41CEE4474002083C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A398A61B1CDED3460034831A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3CBABDD1CE024FA002295C9;
+			remoteInfo = SwiftBot;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		7DA3F2F31CE3A0CF00AE5B53 /* RobotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotView.swift; sourceTree = "<group>"; };
@@ -230,6 +241,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7DF18AD51CEE4474002083C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3CBABDD1CE024FA002295C9 /* SwiftBot */;
+			targetProxy = 7DF18AD41CEE4474002083C1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A398A61F1CDED3460034831A /* Debug */ = {
