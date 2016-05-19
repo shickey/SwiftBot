@@ -170,11 +170,9 @@ func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResu
 public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> () ) {
     
     let levelCopy = level.copy()
-    var encounteredError = false
     let executionQueue = ExecutionQueue()
     
     canGoForward = {
-        if encounteredError { return false }
         let frame = ExecutionFrame(.CanGoForward)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
@@ -187,7 +185,6 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
     }
     
     canGoLeft = {
-        if encounteredError { return false }
         let frame = ExecutionFrame(.CanGoLeft)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
@@ -200,7 +197,6 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
     }
     
     canGoRight = {
-        if encounteredError { return false }
         let frame = ExecutionFrame(.CanGoRight)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
@@ -213,22 +209,17 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
     }
     
     goForward = {
-        if encounteredError { return }
         let frame = ExecutionFrame(.GoForward)
         let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
+        if !enqueueFrame(frame, executionQueue) || !result.success {
             dispatch_async(dispatch_get_main_queue(), {
                 completion(executionQueue)
             })
             NSThread.exit()
         }
-        if !result.success {
-            encounteredError = true
-        }
     }
     
     turnLeft = {
-        if encounteredError { return }
         let frame = ExecutionFrame(.TurnLeft)
         let _ = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
@@ -240,7 +231,6 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
     }
     
     senseCookie = {
-        if encounteredError { return false }
         let frame = ExecutionFrame(.SenseCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
@@ -253,32 +243,24 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
     }
     
     placeCookie = {
-        if encounteredError { return }
         let frame = ExecutionFrame(.PlaceCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
+        if !enqueueFrame(frame, executionQueue) || !result.success {
             dispatch_async(dispatch_get_main_queue(), {
                 completion(executionQueue)
             })
             NSThread.exit()
-        }
-        if !result.success {
-            encounteredError = true
         }
     }
     
     pickupCookie = {
-        if encounteredError { return }
         let frame = ExecutionFrame(.PickupCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
+        if !enqueueFrame(frame, executionQueue) || !result.success {
             dispatch_async(dispatch_get_main_queue(), {
                 completion(executionQueue)
             })
             NSThread.exit()
-        }
-        if !result.success {
-            encounteredError = true
         }
     }
     

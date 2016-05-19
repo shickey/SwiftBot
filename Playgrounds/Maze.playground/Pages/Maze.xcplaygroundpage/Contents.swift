@@ -32,13 +32,15 @@ setup(0)
  * 100 is fastest.
  */
 
-setSpeed(50)
+setSpeed(25)
 
 
 
 
 instructions = {
     
-    
+    while !senseCookie() {
+        goForward()
+    }
     
 }
