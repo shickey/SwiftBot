@@ -1,6 +1,5 @@
-/*
- * Doubly linked list implementation of program execution states
- */
+import Foundation
+import Dispatch
 
 enum RobotInstruction {
     case CanGoForward
@@ -34,12 +33,36 @@ func functionNameForInstruction(instruction: RobotInstruction) -> String {
     }
 }
 
-class ExecutionQueue {
+/*
+ * Doubly linked list implementation of program execution states
+ */
+
+let MAX_QUEUE_COUNT = 10000
+
+public class ExecutionQueue {
     var first : ExecutionFrame! = nil
     var last : ExecutionFrame! = nil
+    var count : Int = 0
 }
 
-func appendFrameToStack(frame: ExecutionFrame, _ queue: ExecutionQueue) {
+extension ExecutionQueue : CustomStringConvertible {
+    public var description : String {
+        var str = ""
+        var currentFrame = first
+        while currentFrame != nil {
+            str += currentFrame.description
+            str += "\n"
+            currentFrame = currentFrame.next
+        }
+        return str
+    }
+}
+
+func enqueueFrame(frame: ExecutionFrame, _ queue: ExecutionQueue) -> Bool {
+    if queue.count > MAX_QUEUE_COUNT {
+        print("TOO MANY INSTRUCTIONS QUEUED")
+        return false
+    }
     if queue.first == nil {
         queue.first = frame
         queue.last = frame
@@ -49,6 +72,8 @@ func appendFrameToStack(frame: ExecutionFrame, _ queue: ExecutionQueue) {
         frame.previous = queue.last
         queue.last = frame
     }
+    queue.count += 1
+    return true
 }
 
 class ExecutionFrame {
@@ -140,4 +165,149 @@ func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResu
     }
     
     return ExecutionResult(success: true, error: nil, sensingResult: nil)
+}
+
+public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> () ) {
+    
+    let levelCopy = level.copy()
+    var encounteredError = false
+    let executionQueue = ExecutionQueue()
+    
+    canGoForward = {
+        if encounteredError { return false }
+        let frame = ExecutionFrame(.CanGoForward)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+        return result.sensingResult!
+    }
+    
+    canGoLeft = {
+        if encounteredError { return false }
+        let frame = ExecutionFrame(.CanGoLeft)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+        return result.sensingResult!
+    }
+    
+    canGoRight = {
+        if encounteredError { return false }
+        let frame = ExecutionFrame(.CanGoRight)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+        return result.sensingResult!
+    }
+    
+    goForward = {
+        if encounteredError { return }
+        let frame = ExecutionFrame(.GoForward)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+        if !result.success {
+            encounteredError = true
+        }
+    }
+    
+    turnLeft = {
+        if encounteredError { return }
+        let frame = ExecutionFrame(.TurnLeft)
+        let _ = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+    }
+    
+    senseCookie = {
+        if encounteredError { return false }
+        let frame = ExecutionFrame(.SenseCookie)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+        return result.sensingResult!
+    }
+    
+    placeCookie = {
+        if encounteredError { return }
+        let frame = ExecutionFrame(.PlaceCookie)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+        if !result.success {
+            encounteredError = true
+        }
+    }
+    
+    pickupCookie = {
+        if encounteredError { return }
+        let frame = ExecutionFrame(.PickupCookie)
+        let result = executeFrameOnLevel(frame, levelCopy)
+        if !enqueueFrame(frame, executionQueue) {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion(executionQueue)
+            })
+            NSThread.exit()
+        }
+        if !result.success {
+            encounteredError = true
+        }
+    }
+    
+    let queuer = BackgroundQueuer(instructions, {
+        dispatch_async(dispatch_get_main_queue(), {
+            completion(executionQueue)
+        })
+        NSThread.exit()
+    })
+    
+    NSThread.detachNewThreadSelector(#selector(BackgroundQueuer.buildQueue), toTarget: queuer, withObject: nil)
+    
+    
+}
+
+class BackgroundQueuer {
+    
+    let instructions : () -> ()
+    let completion : () -> ()
+    
+    init(_ newInstructions: () -> (), _ queueCompletion: () -> ()) {
+        instructions = newInstructions
+        completion = queueCompletion
+    }
+    
+    @objc func buildQueue() {
+        print("hello threaded world!")
+        instructions()
+        completion()
+    }
+    
 }

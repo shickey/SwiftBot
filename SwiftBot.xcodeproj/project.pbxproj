@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A34F9E951CED565B00EF361C /* RobotInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34F9E941CED565B00EF361C /* RobotInstructions.swift */; };
+		A34F9E971CED613200EF361C /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34F9E961CED613200EF361C /* Debug.swift */; };
 		A3CBABE21CE024FA002295C9 /* SwiftBot.h in Headers */ = {isa = PBXBuildFile; fileRef = A3CBABE11CE024FA002295C9 /* SwiftBot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A3CBABE71CE02503002295C9 /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6401CDED9D90034831A /* Execution.swift */; };
 		A3CBABE81CE02503002295C9 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6411CDED9D90034831A /* Geometry.swift */; };
@@ -31,6 +33,8 @@
 /* Begin PBXFileReference section */
 		7DA3F2F31CE3A0CF00AE5B53 /* RobotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobotView.swift; sourceTree = "<group>"; };
 		7DA3F2F41CEB9CF900AE5B53 /* Maze.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Maze.playground; sourceTree = "<group>"; };
+		A34F9E941CED565B00EF361C /* RobotInstructions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RobotInstructions.swift; sourceTree = "<group>"; };
+		A34F9E961CED613200EF361C /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		A398A63D1CDED9CD0034831A /* Grid.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Grid.playground; sourceTree = "<group>"; };
 		A398A63E1CDED9CD0034831A /* Conditions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Conditions.playground; sourceTree = "<group>"; };
 		A398A63F1CDED9CD0034831A /* Intro.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Intro.playground; sourceTree = "<group>"; };
@@ -83,6 +87,8 @@
 				A398A6411CDED9D90034831A /* Geometry.swift */,
 				A398A6421CDED9D90034831A /* Level.swift */,
 				A398A6431CDED9D90034831A /* Map.swift */,
+				A34F9E941CED565B00EF361C /* RobotInstructions.swift */,
+				A34F9E961CED613200EF361C /* Debug.swift */,
 			);
 			path = SwiftBot;
 			sourceTree = "<group>";
@@ -215,8 +221,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3CBABE71CE02503002295C9 /* Execution.swift in Sources */,
+				A34F9E971CED613200EF361C /* Debug.swift in Sources */,
 				A3CBABE81CE02503002295C9 /* Geometry.swift in Sources */,
 				A3CBABE91CE02503002295C9 /* Level.swift in Sources */,
+				A34F9E951CED565B00EF361C /* RobotInstructions.swift in Sources */,
 				A3CBABEA1CE02503002295C9 /* Map.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

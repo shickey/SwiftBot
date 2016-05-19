@@ -67,7 +67,15 @@ instructions = {
     //
     // WRITE INSTRUCTIONS BELOW THIS LINE
     
-    
+    while true {
+        if canGoForward() {
+            goForward()
+        }
+        else {
+            turnLeft()
+            turnLeft()
+        }
+    }
     
     
     
