@@ -39,8 +39,6 @@ setSpeed(25)
 
 instructions = {
     
-    while !senseCookie() {
-        goForward()
-    }
+    
     
 }
