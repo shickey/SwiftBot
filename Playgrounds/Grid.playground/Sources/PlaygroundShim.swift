@@ -19,6 +19,26 @@ public var instructions : () -> () {
     }
 }
 
+public func enableSmokeTrails() {
+    currentLevel.options.smokeTrailsEnabled = true
+}
+
+public func disableSmokeTrails() {
+    currentLevel.options.smokeTrailsEnabled = false
+}
+
+public func setSpeed(speed: Int) {
+    var clampedSpeed : Double = Double(speed)
+    if speed < 1 {
+        clampedSpeed = 1.0
+    }
+    if speed > 100 {
+        clampedSpeed = 100.0
+    }
+    
+    currentLevel.options.animationInterval = 1.0 / clampedSpeed
+}
+
 
 public func run() {
     

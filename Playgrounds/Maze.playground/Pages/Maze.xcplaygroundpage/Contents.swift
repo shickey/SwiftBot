@@ -17,14 +17,12 @@ SwiftBot knows all its normal commands in addition to two more:
 
 setup(0)
 
-
 instructions = {
     
     while !senseCookie() {
         if canGoLeft() {
             turnLeft()
             goForward()
-            
         }
         else if canGoForward() {
             goForward()

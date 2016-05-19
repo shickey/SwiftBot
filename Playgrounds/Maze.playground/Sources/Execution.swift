@@ -289,8 +289,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         NSThread.exit()
     })
     
-    NSThread.detachNewThreadSelector(#selector(BackgroundQueuer.buildQueue), toTarget: queuer, withObject: nil)
-    
+    NSThread.detachNewThreadSelector(Selector("buildQueue"), toTarget: queuer, withObject: nil)
     
 }
 
@@ -305,7 +304,6 @@ class BackgroundQueuer {
     }
     
     @objc func buildQueue() {
-        print("hello threaded world!")
         instructions()
         completion()
     }
