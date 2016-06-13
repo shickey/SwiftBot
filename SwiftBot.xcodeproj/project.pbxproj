@@ -34,8 +34,10 @@
 		A38D92DE1D0E5557003CD997 /* libSwiftBot.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A38D92BE1D0A6D8E003CD997 /* libSwiftBot.dylib */; };
 		A38D92E01D0E5704003CD997 /* LEVELS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92DF1D0E5704003CD997 /* LEVELS.swift */; };
 		A38D92E21D0E5739003CD997 /* BufferSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92E11D0E5739003CD997 /* BufferSource.swift */; };
-		A38D92E41D0E578B003CD997 /* RendererTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92E31D0E578B003CD997 /* RendererTypes.swift */; };
 		A38D92E81D0E5A00003CD997 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = A38D92E51D0E595B003CD997 /* Shaders.metal */; };
+		A38D92EA1D0E5C53003CD997 /* MetalWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92E91D0E5C53003CD997 /* MetalWorker.swift */; };
+		A38D92EC1D0E602D003CD997 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92EB1D0E602D003CD997 /* Renderer.swift */; };
+		A38D92EF1D0E6222003CD997 /* RendererTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92EE1D0E6222003CD997 /* RendererTypes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,8 +64,10 @@
 		A38D92D81D0E553A003CD997 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A38D92DF1D0E5704003CD997 /* LEVELS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LEVELS.swift; sourceTree = "<group>"; };
 		A38D92E11D0E5739003CD997 /* BufferSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferSource.swift; sourceTree = "<group>"; };
-		A38D92E31D0E578B003CD997 /* RendererTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererTypes.swift; sourceTree = "<group>"; };
 		A38D92E51D0E595B003CD997 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		A38D92E91D0E5C53003CD997 /* MetalWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalWorker.swift; sourceTree = "<group>"; };
+		A38D92EB1D0E602D003CD997 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		A38D92EE1D0E6222003CD997 /* RendererTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererTypes.swift; sourceTree = "<group>"; };
 		A398A63D1CDED9CD0034831A /* Grid.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Grid.playground; sourceTree = "<group>"; };
 		A398A63E1CDED9CD0034831A /* Conditions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Conditions.playground; sourceTree = "<group>"; };
 		A398A63F1CDED9CD0034831A /* Intro.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Intro.playground; sourceTree = "<group>"; };
@@ -110,7 +114,7 @@
 			children = (
 				A38D92CF1D0E553A003CD997 /* AppDelegate.swift */,
 				A38D92D11D0E553A003CD997 /* ViewController.swift */,
-				A38D92E31D0E578B003CD997 /* RendererTypes.swift */,
+				A38D92E91D0E5C53003CD997 /* MetalWorker.swift */,
 				A38D92E11D0E5739003CD997 /* BufferSource.swift */,
 				A38D92DF1D0E5704003CD997 /* LEVELS.swift */,
 				A38D92D31D0E553A003CD997 /* Assets.xcassets */,
@@ -142,6 +146,8 @@
 				A398A6431CDED9D90034831A /* Map.swift */,
 				A34F9E941CED565B00EF361C /* RobotInstructions.swift */,
 				A34F9E961CED613200EF361C /* Debug.swift */,
+				A38D92EB1D0E602D003CD997 /* Renderer.swift */,
+				A38D92EE1D0E6222003CD997 /* RendererTypes.swift */,
 			);
 			path = SwiftBot;
 			sourceTree = "<group>";
@@ -299,6 +305,8 @@
 			files = (
 				A38D92C41D0A6DAC003CD997 /* Level.swift in Sources */,
 				A38D92C71D0A6DAC003CD997 /* Debug.swift in Sources */,
+				A38D92EF1D0E6222003CD997 /* RendererTypes.swift in Sources */,
+				A38D92EC1D0E602D003CD997 /* Renderer.swift in Sources */,
 				A38D92C21D0A6D9E003CD997 /* Execution.swift in Sources */,
 				A38D92C51D0A6DAC003CD997 /* Map.swift in Sources */,
 				A38D92C61D0A6DAC003CD997 /* RobotInstructions.swift in Sources */,
@@ -312,9 +320,9 @@
 			files = (
 				A38D92E81D0E5A00003CD997 /* Shaders.metal in Sources */,
 				A38D92E21D0E5739003CD997 /* BufferSource.swift in Sources */,
+				A38D92EA1D0E5C53003CD997 /* MetalWorker.swift in Sources */,
 				A38D92D21D0E553A003CD997 /* ViewController.swift in Sources */,
 				A38D92D01D0E553A003CD997 /* AppDelegate.swift in Sources */,
-				A38D92E41D0E578B003CD997 /* RendererTypes.swift in Sources */,
 				A38D92E01D0E5704003CD997 /* LEVELS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

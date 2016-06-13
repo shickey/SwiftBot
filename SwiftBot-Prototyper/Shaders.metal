@@ -7,11 +7,8 @@ struct Vertex {
 };
 
 vertex Vertex tile_vertex_shader(device Vertex *vertices [[ buffer(0) ]],
-                                 device float4x4 &transform [[ buffer(1) ]],
                                  unsigned int vid [[ vertex_id ]]) {
-    Vertex v = vertices[vid];
-    v.position = transform * v.position;
-    return v;
+    return vertices[vid];
 }
 
 fragment half4 tile_fragment_shader(Vertex v [[ stage_in ]]) {
