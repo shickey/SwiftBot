@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>SwiftBot-Prototyper.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>SwiftBot.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -17,6 +22,16 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>A38D92BD1D0A6D8E003CD997</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A38D92CC1D0E5539003CD997</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>A398A6231CDED3840034831A</key>
 		<dict>
 			<key>primary</key>

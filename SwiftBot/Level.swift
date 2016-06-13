@@ -3,7 +3,7 @@ struct Robot {
     var facing : Direction = .North
 }
 
-typealias Cookie = Point
+public typealias Cookie = Point
 
 struct LevelOptions {
     var animationInterval : Double = 0.25
@@ -12,14 +12,14 @@ struct LevelOptions {
 
 public class Level {
     
-    var map : Map
+    public var map : Map
     var robot : Robot = Robot()
-    var cookies : Set<Cookie> = []
+    public var cookies : Set<Cookie> = []
     var path : [Point] = []
     
     var options : LevelOptions = LevelOptions()
     
-    var goalValidator : ((Level) -> (Bool, [String]?))?
+    public var goalValidator : ((Level) -> (Bool, [String]?))?
     
     public init(map newMap: Map, startingLocation: Point) {
         map = newMap
