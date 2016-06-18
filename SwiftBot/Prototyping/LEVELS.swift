@@ -1,8 +1,5 @@
-import SwiftBot
 import Foundation
 import simd
-
-
 
 public var levels : [Level] = ({
     
@@ -27,24 +24,24 @@ public var levels : [Level] = ({
     
     
     let maze = Level(map: mazeMap, startingLocation: start)
-//    maze.cookies = [cookie : 1]
-//    maze.goalValidator = { (level) in
-//        var valid = true
-//        var errors : [String] = []
-//        
-//        if level.cookies.count > 0 {
-//            valid = false
-//            errors.append("There are still cookies on the floor")
-//        }
-//        
-//        
-//        if valid {
-//            return (true, nil)
-//        }
-//        else {
-//            return (false, errors)
-//        }
-//    }
+    //    maze.cookies = [cookie : 1]
+    //    maze.goalValidator = { (level) in
+    //        var valid = true
+    //        var errors : [String] = []
+    //
+    //        if level.cookies.count > 0 {
+    //            valid = false
+    //            errors.append("There are still cookies on the floor")
+    //        }
+    //
+    //
+    //        if valid {
+    //            return (true, nil)
+    //        }
+    //        else {
+    //            return (false, errors)
+    //        }
+    //    }
     
     return [maze]
     

@@ -1,16 +1,20 @@
 import simd
 
-public var renderingLevel : Level! = nil
+var renderingLevel : Level! = levels[0]
 
 var mapVertexData : [Float] = []
 
-public func updateAndRender(dt: Float) -> [Float] {
+public func updateAndRender(dt: Double, renderMemory: UnsafeMutablePointer<Void>) -> Int {
     
     if mapVertexData.count == 0 {
         buildMapVertices(renderingLevel.map)
     }
     
-    return mapVertexData
+    memcpy(renderMemory, mapVertexData, mapVertexData.count * sizeof(Float))
+    
+    return mapVertexData.count
+    
+//    renderMemory.assignFrom(data, count: data.count)
 }
 
 func buildMapVertices(map: Map) {
@@ -46,5 +50,4 @@ func buildMapVertices(map: Map) {
             mapVertexData += quad.data
         }
     }
-
 }

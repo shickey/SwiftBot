@@ -18,7 +18,7 @@ class ViewController: NSViewController {
     }
     
     override func viewDidAppear() {
-        beginRendering(view.layer!, level: levels[0])
+        beginRendering(view.layer!)
     }
 
 }

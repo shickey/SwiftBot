@@ -31,13 +31,12 @@
 		A38D92D21D0E553A003CD997 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92D11D0E553A003CD997 /* ViewController.swift */; };
 		A38D92D41D0E553A003CD997 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A38D92D31D0E553A003CD997 /* Assets.xcassets */; };
 		A38D92D71D0E553A003CD997 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A38D92D51D0E553A003CD997 /* Main.storyboard */; };
-		A38D92DE1D0E5557003CD997 /* libSwiftBot.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A38D92BE1D0A6D8E003CD997 /* libSwiftBot.dylib */; };
-		A38D92E01D0E5704003CD997 /* LEVELS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92DF1D0E5704003CD997 /* LEVELS.swift */; };
 		A38D92E21D0E5739003CD997 /* BufferSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92E11D0E5739003CD997 /* BufferSource.swift */; };
 		A38D92E81D0E5A00003CD997 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = A38D92E51D0E595B003CD997 /* Shaders.metal */; };
 		A38D92EA1D0E5C53003CD997 /* MetalWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92E91D0E5C53003CD997 /* MetalWorker.swift */; };
 		A38D92EC1D0E602D003CD997 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92EB1D0E602D003CD997 /* Renderer.swift */; };
 		A38D92EF1D0E6222003CD997 /* RendererTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92EE1D0E6222003CD997 /* RendererTypes.swift */; };
+		A38D92F41D0E6DFB003CD997 /* LEVELS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A38D92F31D0E6DFB003CD997 /* LEVELS.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,12 +61,12 @@
 		A38D92D31D0E553A003CD997 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A38D92D61D0E553A003CD997 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A38D92D81D0E553A003CD997 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A38D92DF1D0E5704003CD997 /* LEVELS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LEVELS.swift; sourceTree = "<group>"; };
 		A38D92E11D0E5739003CD997 /* BufferSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferSource.swift; sourceTree = "<group>"; };
 		A38D92E51D0E595B003CD997 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		A38D92E91D0E5C53003CD997 /* MetalWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalWorker.swift; sourceTree = "<group>"; };
 		A38D92EB1D0E602D003CD997 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		A38D92EE1D0E6222003CD997 /* RendererTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererTypes.swift; sourceTree = "<group>"; };
+		A38D92F31D0E6DFB003CD997 /* LEVELS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LEVELS.swift; path = SwiftBot/Prototyping/LEVELS.swift; sourceTree = "<group>"; };
 		A398A63D1CDED9CD0034831A /* Grid.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Grid.playground; sourceTree = "<group>"; };
 		A398A63E1CDED9CD0034831A /* Conditions.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Conditions.playground; sourceTree = "<group>"; };
 		A398A63F1CDED9CD0034831A /* Intro.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Intro.playground; sourceTree = "<group>"; };
@@ -93,7 +92,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A38D92DE1D0E5557003CD997 /* libSwiftBot.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +114,6 @@
 				A38D92D11D0E553A003CD997 /* ViewController.swift */,
 				A38D92E91D0E5C53003CD997 /* MetalWorker.swift */,
 				A38D92E11D0E5739003CD997 /* BufferSource.swift */,
-				A38D92DF1D0E5704003CD997 /* LEVELS.swift */,
 				A38D92D31D0E553A003CD997 /* Assets.xcassets */,
 				A38D92D51D0E553A003CD997 /* Main.storyboard */,
 				A38D92D81D0E553A003CD997 /* Info.plist */,
@@ -125,11 +122,20 @@
 			path = "SwiftBot-Prototyper";
 			sourceTree = "<group>";
 		};
+		A38D92F21D0E6DBD003CD997 /* SwiftBot-Prototyping */ = {
+			isa = PBXGroup;
+			children = (
+				A38D92F31D0E6DFB003CD997 /* LEVELS.swift */,
+			);
+			name = "SwiftBot-Prototyping";
+			sourceTree = "<group>";
+		};
 		A398A61A1CDED3460034831A = {
 			isa = PBXGroup;
 			children = (
 				7DA3F2F21CE39ACC00AE5B53 /* PlaygroundSupport */,
 				A398A63B1CDED9980034831A /* SwiftBot */,
+				A38D92F21D0E6DBD003CD997 /* SwiftBot-Prototyping */,
 				A398A63C1CDED9A40034831A /* Playgrounds */,
 				A3CBABE01CE024FA002295C9 /* SwiftBot */,
 				A38D92CE1D0E553A003CD997 /* SwiftBot-Prototyper */,
@@ -311,6 +317,7 @@
 				A38D92C51D0A6DAC003CD997 /* Map.swift in Sources */,
 				A38D92C61D0A6DAC003CD997 /* RobotInstructions.swift in Sources */,
 				A38D92C31D0A6DAC003CD997 /* Geometry.swift in Sources */,
+				A38D92F41D0E6DFB003CD997 /* LEVELS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,7 +330,6 @@
 				A38D92EA1D0E5C53003CD997 /* MetalWorker.swift in Sources */,
 				A38D92D21D0E553A003CD997 /* ViewController.swift in Sources */,
 				A38D92D01D0E553A003CD997 /* AppDelegate.swift in Sources */,
-				A38D92E01D0E5704003CD997 /* LEVELS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,9 +378,11 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				EXECUTABLE_PREFIX = lib;
+				EXPORTED_SYMBOLS_FILE = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -392,8 +400,14 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-export_dynamic",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = YES;
+				UNEXPORTED_SYMBOLS_FILE = "";
 			};
 			name = Debug;
 		};
@@ -420,9 +434,11 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXECUTABLE_PREFIX = lib;
+				EXPORTED_SYMBOLS_FILE = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -433,8 +449,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-Xlinker",
+					"-export_dynamic",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = YES;
+				UNEXPORTED_SYMBOLS_FILE = "";
 			};
 			name = Release;
 		};

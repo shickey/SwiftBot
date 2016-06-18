@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "updateAndRender(Float, renderMemory : UnsafeMutablePointer&lt;()&gt;) -&gt; ():Renderer.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "0x000000010106ce00">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "(drawFrame(CVDisplayLink, UnsafePointer&lt;CVTimeStamp&gt;, UnsafePointer&lt;CVTimeStamp&gt;, UInt64, UnsafeMutablePointer&lt;UInt64&gt;, UnsafeMutablePointer&lt;()&gt;) -&gt; Int32).(closure #1):MetalWorker.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "0x0000700000428ca8">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "loadLibSwiftBot() -&gt; ():MetalWorker.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "renderMemory">
+            </PersistentString>
+            <PersistentString
+               value = "updateAndRender">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "beginRendering(CALayer) -&gt; ():MetalWorker.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "renderMemory">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
