@@ -9,7 +9,7 @@ var worldTransform : float4x4 = float4x4(1)
 
 let testInstructions = {
     
-    for _ in 0..<50 {
+    while !senseCookie() {
         if canGoLeft() {
             turnLeft()
             goForward()
@@ -36,7 +36,7 @@ var buildingInstructions = false
 var executionQueue : ExecutionQueue! = nil
 var currentInstruction : ExecutionFrame! = nil
 
-var secondsPerInstruction = 0.1
+var secondsPerInstruction = 0.05
 var instructionTime = 0.0 // Value between 0.0 and 1.0 representing percentage of current instruction time
 
 public func updateAndRender(dt: Double, renderMemory: UnsafeMutablePointer<Void>) -> Int {
@@ -90,11 +90,13 @@ public func updateAndRender(dt: Double, renderMemory: UnsafeMutablePointer<Void>
         mapNeedsRender = false
     }
     
+    let cookieVerts = renderCookies(renderingLevel)
+    
     let robotVerts = renderRobot(renderingLevel, robotTranslation, robotRotation)
     
-    memcpy(renderMemory, mapVertexData + robotVerts, (mapVertexData.count + robotVerts.count) * sizeof(Float))
+    memcpy(renderMemory, mapVertexData + cookieVerts + robotVerts, (mapVertexData.count + cookieVerts.count + robotVerts.count) * sizeof(Float))
     
-    return (mapVertexData.count + robotVerts.count)
+    return (mapVertexData.count + cookieVerts.count + robotVerts.count)
 }
 
 func computeWorldTransform(level: Level) -> float4x4 {
@@ -134,6 +136,25 @@ func renderMap(map: Map) -> [Float] {
         }
     }
     return mapVerts
+}
+
+func renderCookies(level: Level) -> [Float] {
+    var cookieVerts : [Float] = []
+    for cookie in level.cookies {
+        let originX = Float(cookie.x)
+        let originY = Float(cookie.y)
+        
+        let color = float4(1.0, 0.0, 0.0, 1.0)
+        let v0 = worldTransform * float4(originX,       originY,       0.0, 1.0)
+        let v1 = worldTransform * float4(originX + 1.0, originY,       0.0, 1.0)
+        let v2 = worldTransform * float4(originX + 1.0, originY + 1.0, 0.0, 1.0)
+        let v3 = worldTransform * float4(originX,       originY + 1.0, 0.0, 1.0)
+        
+        let quad = Quad(v0, v1, v2, v3, color)
+        
+        cookieVerts += quad.data
+    }
+    return cookieVerts
 }
 
 func renderRobot(level: Level, _ translation: float4x4, _ rotation: float4x4) -> [Float] {
