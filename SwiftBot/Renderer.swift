@@ -7,14 +7,90 @@ var mapVertexData : [Float] = []
 
 var worldTransform : float4x4 = float4x4(1)
 
+let testInstructions = {
+    
+    for _ in 0..<50 {
+        if canGoLeft() {
+            turnLeft()
+            goForward()
+        }
+        else if canGoForward() {
+            goForward()
+        }
+        else if canGoRight() {
+            turnLeft()
+            turnLeft()
+            turnLeft()
+            goForward()
+        }
+        else {
+            turnLeft()
+            turnLeft()
+        }
+    }
+    
+}
+
+var instructionsReady = false
+var buildingInstructions = false
+var executionQueue : ExecutionQueue! = nil
+var currentInstruction : ExecutionFrame! = nil
+
+var secondsPerInstruction = 0.1
+var instructionTime = 0.0 // Value between 0.0 and 1.0 representing percentage of current instruction time
+
 public func updateAndRender(dt: Double, renderMemory: UnsafeMutablePointer<Void>) -> Int {
+    
+    var robotRotation = float4x4(1)
+    var robotTranslation = float4x4(1)
+    
+    if !instructionsReady {
+        if !buildingInstructions {
+            buildExecutionQueueInBackground(renderingLevel, testInstructions, { (queue) in
+                executionQueue = queue
+                currentInstruction = executionQueue.first
+                buildingInstructions = false
+                instructionsReady = true
+            })
+            buildingInstructions = true
+        }
+    }
+    else if currentInstruction != nil {
+        // Simulate
+        if instructionTime >= 1.0 {
+            executeFrameOnLevel(currentInstruction, renderingLevel)
+            instructionTime = 0.0
+            currentInstruction  = currentInstruction.next
+        }
+        else {
+            instructionTime += dt / secondsPerInstruction
+            // Simulate animations
+            if currentInstruction.instruction == .TurnLeft {
+                robotRotation = rotateTransform((Float(M_PI) / 2.0) * Float(instructionTime))
+            }
+            else if currentInstruction.instruction == .GoForward {
+                switch renderingLevel.robot.facing {
+                case .North:
+                    robotTranslation = translateTransform(0.0, -1.0 * Float(instructionTime))
+                case .South:
+                    robotTranslation = translateTransform(0.0, 1.0 * Float(instructionTime))
+                case .East:
+                    robotTranslation = translateTransform(1.0 * Float(instructionTime), 0.0)
+                case .West:
+                    robotTranslation = translateTransform(-1.0 * Float(instructionTime), 0.0)
+                }
+                
+            }
+        }
+    }
     
     if mapNeedsRender {
         worldTransform = computeWorldTransform(renderingLevel)
         mapVertexData = renderMap(renderingLevel.map)
+        mapNeedsRender = false
     }
     
-    let robotVerts = renderRobot(renderingLevel)
+    let robotVerts = renderRobot(renderingLevel, robotTranslation, robotRotation)
     
     memcpy(renderMemory, mapVertexData + robotVerts, (mapVertexData.count + robotVerts.count) * sizeof(Float))
     
@@ -60,7 +136,7 @@ func renderMap(map: Map) -> [Float] {
     return mapVerts
 }
 
-func renderRobot(level: Level) -> [Float] {
+func renderRobot(level: Level, _ translation: float4x4, _ rotation: float4x4) -> [Float] {
     var robotTransform : float4x4 = float4x4(1)
     
     let facing = level.robot.facing
@@ -79,20 +155,22 @@ func renderRobot(level: Level) -> [Float] {
     
     robotTransform = translateTransform(-0.5, -0.5) * robotTransform
     robotTransform = rotateTransform(Float(angle)) * robotTransform
+    robotTransform = rotation * robotTransform
     robotTransform = translateTransform(Float(location.x) + 0.5, Float(location.y) + 0.5) * robotTransform
+    robotTransform = translation * robotTransform
     robotTransform = worldTransform * robotTransform
     
     let color = float4(1.0, 0.75, 0.5, 1.0)
     
-    let bodyV0 = robotTransform * float4(0.0, 1.0, 0.0, 1.0)
-    let bodyV1 = robotTransform * float4(0.0, 0.5, 0.0, 1.0)
-    let bodyV2 = robotTransform * float4(1.0, 0.5, 0.0, 1.0)
-    let bodyV3 = robotTransform * float4(1.0, 1.0, 0.0, 1.0)
+    let bodyV0 = robotTransform * float4(0.15, 0.85, 0.0, 1.0)
+    let bodyV1 = robotTransform * float4(0.15, 0.5, 0.0, 1.0)
+    let bodyV2 = robotTransform * float4(0.85, 0.5, 0.0, 1.0)
+    let bodyV3 = robotTransform * float4(0.85, 0.85, 0.0, 1.0)
     let bodyQuad = Quad(bodyV0, bodyV1, bodyV2, bodyV3, color)
     
-    let noseV0 = robotTransform * float4(0.5, 0.0, 0.0, 1.0)
-    let noseV1 = robotTransform * float4(1.0, 0.5, 0.0, 1.0)
-    let noseV2 = robotTransform * float4(0.0, 0.5, 0.0, 1.0)
+    let noseV0 = robotTransform * float4(0.5, 0.15, 0.0, 1.0)
+    let noseV1 = robotTransform * float4(0.85, 0.5, 0.0, 1.0)
+    let noseV2 = robotTransform * float4(0.15, 0.5, 0.0, 1.0)
     let noseTri = Triangle(noseV0, noseV1, noseV2, color)
     
     return bodyQuad.data + noseTri.data
