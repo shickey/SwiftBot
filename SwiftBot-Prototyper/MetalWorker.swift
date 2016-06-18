@@ -88,6 +88,7 @@ func drawFrame(displayLink: CVDisplayLink,
             if libSwiftBotWriteTime.compare(lastModTime!) == .OrderedDescending {
                 unloadLibSwiftBot()
                 loadLibSwiftBot()
+                print("libSwiftBot reloaded")
             }
         } catch {
             print("Missed libSwiftBot live reload")

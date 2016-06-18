@@ -1,7 +1,7 @@
 import Foundation
 import simd
 
-public var levels : [Level] = ({
+var levels : [Level] = ({
     
     let mazeMap = Map(mapString: "WWWWWWWWWWWWWWWWWWWWWWWWW\nW  W W   W   W   W   WW W\nWW W W W W W W W   W    W\nWW W WWW W W W WWWWWWWW W\nW  W     W W W   W    W W\nW WWW WWWW W W W W WW   W\nW          W W W W WWWWWW\nWWWWWWWWWWWW WWW W  W   W\nW  W   W   W   W WW W WWW\nWW W W   W W WWW  W W   W\nWW W WWWWW W W W WW W W W\nWW W     W   W    W WWW W\nWW WWWWW WW WWWWW W     W\nW      W WW     W WWW W W\nW WWWWWW W  WWW W   W W W\nW        W WW W WWW W W W\nWWWWWWWWWW W  W   W W W W\nW    W   WWW WWWW W W W W\nW WW W W        W W WWW W\nW  W W WWWWW WW W W W W W\nW WW W W W   W  W   W   W\nW W  W W   WWW WWWWWWW WW\nW WWWW W W   W W     W WW\nW      W WWW W   WWW   WW\nWWWWWWWWWWWWWWWWWWWWWWWWW")
     
@@ -13,14 +13,14 @@ public var levels : [Level] = ({
         var x = Int(arc4random_uniform(UInt32(mapSize.width)))
         var y = Int(arc4random_uniform(UInt32(mapSize.height)))
         start = Point(x, y)
-    } while (mazeMap.tileAtLocation(start) == .Wall)
+    } while (tileAtMapLocation(mazeMap, start) == .Wall)
     
     var cookie : Cookie
     repeat {
         var x = Int(arc4random_uniform(UInt32(mapSize.width)))
         var y = Int(arc4random_uniform(UInt32(mapSize.height)))
         cookie = Point(x, y)
-    } while (mazeMap.tileAtLocation(cookie) == .Wall || cookie == start)
+    } while (tileAtMapLocation(mazeMap, cookie) == .Wall || cookie == start)
     
     
     let maze = Level(map: mazeMap, startingLocation: start)

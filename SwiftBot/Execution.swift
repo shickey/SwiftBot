@@ -39,14 +39,14 @@ func functionNameForInstruction(instruction: RobotInstruction) -> String {
 
 let MAX_QUEUE_COUNT = 10000
 
-public class ExecutionQueue {
+class ExecutionQueue {
     var first : ExecutionFrame! = nil
     var last : ExecutionFrame! = nil
     var count : Int = 0
 }
 
 extension ExecutionQueue : CustomStringConvertible {
-    public var description : String {
+    var description : String {
         var str = ""
         var currentFrame = first
         while currentFrame != nil {
@@ -167,7 +167,7 @@ func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResu
     return ExecutionResult(success: true, error: nil, sensingResult: nil)
 }
 
-public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> () ) {
+func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> () ) {
     
     let levelCopy = level.copy()
     let executionQueue = ExecutionQueue()

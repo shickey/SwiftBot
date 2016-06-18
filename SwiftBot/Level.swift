@@ -3,30 +3,30 @@ struct Robot {
     var facing : Direction = .North
 }
 
-public typealias Cookie = Point
+typealias Cookie = Point
 
 struct LevelOptions {
     var animationInterval : Double = 0.25
     var smokeTrailsEnabled : Bool = false
 }
 
-public class Level {
+class Level {
     
-    public var map : Map
+    var map : Map
     var robot : Robot = Robot()
-    public var cookies : Set<Cookie> = []
+    var cookies : Set<Cookie> = []
     var path : [Point] = []
     
     var options : LevelOptions = LevelOptions()
     
-    public var goalValidator : ((Level) -> (Bool, [String]?))?
+    var goalValidator : ((Level) -> (Bool, [String]?))?
     
-    public init(map newMap: Map, startingLocation: Point) {
+    init(map newMap: Map, startingLocation: Point) {
         map = newMap
         moveRobot(self, startingLocation)
     }
     
-    public func copy() -> Level {
+    func copy() -> Level {
         let c = Level(map: map, startingLocation: robot.location)
         c.cookies = cookies
         c.robot = robot
@@ -53,7 +53,7 @@ func canMoveRobot(level: Level, _ location: Point) -> Bool {
     let map = level.map
     if location.x < 0 || location.x >= map.size.width { return false }
     if location.y < 0 || location.y >= map.size.height { return false }
-    let tile = map.tileAtLocation(location)
+    let tile = tileAtMapLocation(map, location)
     if tile == .Wall {
         return false
     }
@@ -77,13 +77,13 @@ func validateLevel(level: Level) -> (Bool, [String]?) {
 
 extension Level : CustomStringConvertible {
     
-    public var description: String {
+    var description: String {
         get {
             var lines : [String] = []
             for y in 0..<map.size.height {
                 var line = ""
                 for x in 0..<map.size.width {
-                    let tile = map.tileAtLocation(Point(x, y))
+                    let tile = tileAtMapLocation(map,Point(x, y))
                     switch tile {
                     case .Wall:
                         line += "#"

@@ -1,23 +1,23 @@
-public enum MapTile : Character, Equatable {
+enum MapTile : Character, Equatable {
     case Wall = "W"
     case Space = " "
 }
 
-public func ==(lhs: MapTile, rhs: MapTile) -> Bool {
+func ==(lhs: MapTile, rhs: MapTile) -> Bool {
     return lhs.rawValue == rhs.rawValue
 }
 
-public class Map {
+class Map {
     
     var tiles : [[MapTile]] = []
     
-    public var size : Size {
+    var size : Size {
         get {
             return Size(tiles[0].count, tiles.count)
         }
     }
     
-    public init(size: Size) {
+    init(size: Size) {
         tiles = {
             var newTiles : [[MapTile]] = []
             
@@ -50,7 +50,7 @@ public class Map {
         }()
     }
     
-    public init(mapString: String) {
+    init(mapString: String) {
         tiles = {
             let lines = mapString.componentsSeparatedByString("\n")
             var tiles : [[MapTile]] = []
@@ -64,9 +64,8 @@ public class Map {
             return tiles
         }()
     }
-    
-    public func tileAtLocation(location: Point) -> MapTile {
-        return tiles[location.y][location.x]
-    }
-    
+}
+
+func tileAtMapLocation(map: Map, _ location: Point) -> MapTile {
+    return map.tiles[location.y][location.x]
 }
