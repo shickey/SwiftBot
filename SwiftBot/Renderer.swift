@@ -70,21 +70,16 @@ func renderRobot(level: Level) -> [Float] {
     case .South:
         angle = M_PI
     case .East:
-        angle = M_PI / 2.0
-    case .West:
         angle = 3.0 * M_PI / 2.0
+    case .West:
+        angle = M_PI / 2.0
     }
     
-    // TODO: Fix this cos() ridiculousness. WHY CAN'T I CALL THE VERSION THAT TAKES A DOUBLE??!
-    robotTransform[0][0] =  cos(Float(angle))
-    robotTransform[0][1] = -sin(Float(angle))
-    robotTransform[1][0] =  sin(Float(angle))
-    robotTransform[1][1] =  cos(Float(angle))
-    
     let location = level.robot.location
-    robotTransform[3][0] = Float(location.x) + 0
-    robotTransform[3][1] = Float(location.y)
     
+    robotTransform = translateTransform(-0.5, -0.5) * robotTransform
+    robotTransform = rotateTransform(Float(angle)) * robotTransform
+    robotTransform = translateTransform(Float(location.x) + 0.5, Float(location.y) + 0.5) * robotTransform
     robotTransform = worldTransform * robotTransform
     
     let color = float4(1.0, 0.75, 0.5, 1.0)
@@ -102,4 +97,21 @@ func renderRobot(level: Level) -> [Float] {
     
     return bodyQuad.data + noseTri.data
     
+}
+
+func translateTransform(x: Float, _ y: Float) -> float4x4 {
+    var transform = float4x4(1)
+    transform[3][0] = x
+    transform[3][1] = y
+    return transform
+}
+
+// TODO: Fix this cos() ridiculousness. WHY CAN'T I CALL THE VERSION THAT TAKES A DOUBLE??!
+func rotateTransform(theta: Float) -> float4x4 {
+    var transform = float4x4(1)
+    transform[0][0] =  cos(theta)
+    transform[0][1] = -sin(theta)
+    transform[1][0] =  sin(theta)
+    transform[1][1] =  cos(theta)
+    return transform
 }
