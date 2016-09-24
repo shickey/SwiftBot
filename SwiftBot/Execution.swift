@@ -167,19 +167,26 @@ public func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> Execut
     return ExecutionResult(success: true, error: nil, sensingResult: nil)
 }
 
-public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> () ) {
+public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> (), _ backgroundCompletion: (() -> ())? = nil ) {
     
     let levelCopy = level.copy()
     let executionQueue = ExecutionQueue()
+    
+    let finish = {
+        if let bc = backgroundCompletion {
+            bc()
+        }
+        dispatch_async(dispatch_get_main_queue(), {
+            completion(executionQueue)
+        })
+        NSThread.exit()
+    }
     
     canGoForward = {
         let frame = ExecutionFrame(.CanGoForward)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
         return result.sensingResult!
     }
@@ -188,10 +195,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.CanGoLeft)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
         return result.sensingResult!
     }
@@ -200,10 +204,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.CanGoRight)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
         return result.sensingResult!
     }
@@ -212,10 +213,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.GoForward)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) || !result.success {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
     }
     
@@ -223,10 +221,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.TurnLeft)
         let _ = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
     }
     
@@ -234,10 +229,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.SenseCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
         return result.sensingResult!
     }
@@ -246,10 +238,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.PlaceCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) || !result.success {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
     }
     
@@ -257,19 +246,11 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.PickupCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) || !result.success {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion(executionQueue)
-            })
-            NSThread.exit()
+            finish()
         }
     }
     
-    let queuer = BackgroundQueuer(instructions, {
-        dispatch_async(dispatch_get_main_queue(), {
-            completion(executionQueue)
-        })
-        NSThread.exit()
-    })
+    let queuer = BackgroundQueuer(instructions, finish)
     
     NSThread.detachNewThreadSelector(Selector("buildQueue"), toTarget: queuer, withObject: nil)
     

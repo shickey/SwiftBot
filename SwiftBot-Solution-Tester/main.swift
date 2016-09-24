@@ -91,13 +91,13 @@ var instructions = {
 
 
 
-//var semaphore = dispatch_semaphore_create(1)
+var semaphore = dispatch_semaphore_create(1)
 
 var numInstructions : [Int] = []
 
 for (index, level) in levels.enumerate() {
     
-//    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
     
     buildExecutionQueueInBackground(level, instructions, { (executionQueue) in
         let mapSize = level.map.size.width
@@ -121,11 +121,12 @@ for (index, level) in levels.enumerate() {
             for num in numInstructions {
                 print(num)
             }
-//            exit(0)
+            exit(0)
         }
         
-        }
-    )
+        }, {
+            dispatch_semaphore_signal(semaphore)
+    })
     
     
 }
