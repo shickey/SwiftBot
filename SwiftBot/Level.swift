@@ -3,30 +3,30 @@ struct Robot {
     var facing : Direction = .North
 }
 
-typealias Cookie = Point
+public typealias Cookie = Point
 
 struct LevelOptions {
     var animationInterval : Double = 0.25
     var smokeTrailsEnabled : Bool = false
 }
 
-class Level {
+public class Level {
     
-    var map : Map
+    public var map : Map
     var robot : Robot = Robot()
-    var cookies : Set<Cookie> = []
+    public var cookies : Set<Cookie> = []
     var path : [Point] = []
     
     var options : LevelOptions = LevelOptions()
     
-    var goalValidator : ((Level) -> (Bool, [String]?))?
+    public var goalValidator : ((Level) -> (Bool, [String]?))?
     
-    init(map newMap: Map, startingLocation: Point) {
+    public init(map newMap: Map, startingLocation: Point) {
         map = newMap
         moveRobot(self, startingLocation)
     }
     
-    func copy() -> Level {
+    public func copy() -> Level {
         let c = Level(map: map, startingLocation: robot.location)
         c.cookies = cookies
         c.robot = robot
@@ -64,7 +64,7 @@ func canMoveRobot(level: Level, _ location: Point) -> Bool {
  * Validation
  */
 
-func validateLevel(level: Level) -> (Bool, [String]?) {
+public func validateLevel(level: Level) -> (Bool, [String]?) {
     if let validator = level.goalValidator {
         return validator(level)
     }
@@ -77,7 +77,7 @@ func validateLevel(level: Level) -> (Bool, [String]?) {
 
 extension Level : CustomStringConvertible {
     
-    var description: String {
+    public var description: String {
         get {
             var lines : [String] = []
             for y in 0..<map.size.height {

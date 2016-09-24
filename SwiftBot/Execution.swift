@@ -39,14 +39,14 @@ func functionNameForInstruction(instruction: RobotInstruction) -> String {
 
 let MAX_QUEUE_COUNT = 10000
 
-class ExecutionQueue {
-    var first : ExecutionFrame! = nil
-    var last : ExecutionFrame! = nil
-    var count : Int = 0
+public class ExecutionQueue {
+    public var first : ExecutionFrame! = nil
+    public var last : ExecutionFrame! = nil
+    public var count : Int = 0
 }
 
 extension ExecutionQueue : CustomStringConvertible {
-    var description : String {
+    public var description : String {
         var str = ""
         var currentFrame = first
         while currentFrame != nil {
@@ -76,12 +76,12 @@ func enqueueFrame(frame: ExecutionFrame, _ queue: ExecutionQueue) -> Bool {
     return true
 }
 
-class ExecutionFrame {
+public class ExecutionFrame {
     
     let instruction : RobotInstruction
     
-    var previous : ExecutionFrame? = nil
-    var next : ExecutionFrame? = nil
+    public var previous : ExecutionFrame? = nil
+    public var next : ExecutionFrame? = nil
     
     init(_ newInstruction: RobotInstruction) {
         instruction = newInstruction
@@ -89,7 +89,7 @@ class ExecutionFrame {
 }
 
 extension ExecutionFrame : CustomStringConvertible {
-    var description : String {
+    public var description : String {
         var str = "[ExecutionFrame:\n"
         str += "    instruction: " + functionNameForInstruction(instruction) + "\n"
         str += "    previous: "
@@ -118,13 +118,13 @@ enum RobotError {
     case CannotStackCookies
 }
 
-struct ExecutionResult {
+public struct ExecutionResult {
     let success : Bool
     let error : RobotError?
     let sensingResult : Bool?
 }
 
-func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResult {
+public func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResult {
     
     switch frame.instruction {
     case .CanGoForward:
@@ -167,7 +167,7 @@ func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> ExecutionResu
     return ExecutionResult(success: true, error: nil, sensingResult: nil)
 }
 
-func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> () ) {
+public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> () ) {
     
     let levelCopy = level.copy()
     let executionQueue = ExecutionQueue()

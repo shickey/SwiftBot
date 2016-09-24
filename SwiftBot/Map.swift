@@ -7,17 +7,17 @@ func ==(lhs: MapTile, rhs: MapTile) -> Bool {
     return lhs.rawValue == rhs.rawValue
 }
 
-class Map {
+public class Map {
     
     var tiles : [[MapTile]] = []
     
-    var size : Size {
+    public var size : Size {
         get {
             return Size(tiles[0].count, tiles.count)
         }
     }
     
-    init(size: Size) {
+    public init(size: Size) {
         tiles = {
             var newTiles : [[MapTile]] = []
             
@@ -50,7 +50,7 @@ class Map {
         }()
     }
     
-    init(mapString: String) {
+    public init(mapString: String) {
         tiles = {
             let lines = mapString.componentsSeparatedByString("\n")
             var tiles : [[MapTile]] = []
