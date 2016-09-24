@@ -1,5 +1,4 @@
 import Foundation
-import SwiftBot
 
 public var levels : [Level] = ({
     

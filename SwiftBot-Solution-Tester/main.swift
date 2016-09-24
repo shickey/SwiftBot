@@ -1,7 +1,6 @@
 import Foundation
 import Dispatch
 import Darwin
-import SwiftBot
 
 
 func goRight() {
@@ -122,7 +121,7 @@ for (index, level) in levels.enumerate() {
             for num in numInstructions {
                 print(num)
             }
-            exit(0)
+//            exit(0)
         }
         
         }

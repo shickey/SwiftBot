@@ -21,9 +21,14 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		7D4C13FD1D9712D50042AB4A /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6401CDED9D90034831A /* Execution.swift */; };
+		7D4C13FE1D9712D50042AB4A /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6411CDED9D90034831A /* Geometry.swift */; };
+		7D4C13FF1D9712D50042AB4A /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6421CDED9D90034831A /* Level.swift */; };
+		7D4C14001D9712D50042AB4A /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6431CDED9D90034831A /* Map.swift */; };
+		7D4C14011D9712D50042AB4A /* RobotInstructions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34F9E941CED565B00EF361C /* RobotInstructions.swift */; };
+		7D4C14021D9712D50042AB4A /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34F9E961CED613200EF361C /* Debug.swift */; };
 		7D4D5A8A1D9704A000619CA5 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4D5A891D9704A000619CA5 /* main.swift */; };
 		7D4D5A921D97053E00619CA5 /* TEST_LEVELS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4D5A911D97053E00619CA5 /* TEST_LEVELS.swift */; };
-		7D4D5A941D970ABE00619CA5 /* libSwiftBot.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A38D92BE1D0A6D8E003CD997 /* libSwiftBot.dylib */; };
 		A38D92C21D0A6D9E003CD997 /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6401CDED9D90034831A /* Execution.swift */; };
 		A38D92C31D0A6DAC003CD997 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6411CDED9D90034831A /* Geometry.swift */; };
 		A38D92C41D0A6DAC003CD997 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = A398A6421CDED9D90034831A /* Level.swift */; };
@@ -103,7 +108,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D4D5A941D970ABE00619CA5 /* libSwiftBot.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,7 +371,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D4C13FD1D9712D50042AB4A /* Execution.swift in Sources */,
+				7D4C13FE1D9712D50042AB4A /* Geometry.swift in Sources */,
 				7D4D5A921D97053E00619CA5 /* TEST_LEVELS.swift in Sources */,
+				7D4C13FF1D9712D50042AB4A /* Level.swift in Sources */,
+				7D4C14001D9712D50042AB4A /* Map.swift in Sources */,
+				7D4C14021D9712D50042AB4A /* Debug.swift in Sources */,
+				7D4C14011D9712D50042AB4A /* RobotInstructions.swift in Sources */,
 				7D4D5A8A1D9704A000619CA5 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
