@@ -12,7 +12,14 @@ var metalLayer : CAMetalLayer! = nil
 var pipeline : MTLRenderPipelineState! = nil
 var displayLink : CVDisplayLink? = nil
 
-let libSwiftBotPath = "/Users/seanhickey/Library/Developer/Xcode/DerivedData/SwiftBot-adchmvnplykviremwidjfmfzobcv/Build/Products/Debug/libSwiftBot.dylib"
+let libSwiftBotPath : String = ({
+    let appPath = NSBundle.mainBundle().bundlePath
+    let components = appPath.characters.split("/")
+    let head = components.dropLast(1).map(String.init).joinWithSeparator("/")
+    
+    return "/" + head + "/libSwiftBot.dylib"
+})()
+
 typealias updateAndRenderSignature = @convention(c) (Double, UnsafeMutablePointer<Void>) -> (Int)
 
 typealias dylibHandle = UnsafeMutablePointer<Void>
@@ -57,7 +64,7 @@ func beginRendering(hostLayer: CALayer) {
 
 func loadLibSwiftBot() {
     libSwiftBot = dlopen(libSwiftBotPath, RTLD_LAZY|RTLD_GLOBAL)
-    let updateAndRenderSym = dlsym(libSwiftBot, "_TF8SwiftBot15updateAndRenderFTSd12renderMemoryGSpT___Si")
+    let updateAndRenderSym = dlsym(libSwiftBot, "_TF8SwiftBot15updateAndRenderFTSd12renderMemoryGVSs20UnsafeMutablePointerT___Si")
     updateAndRender = unsafeBitCast(updateAndRenderSym, updateAndRenderSignature.self)
     lastModTime = try! getLastWriteTime(libSwiftBotPath)
 }
@@ -65,7 +72,8 @@ func loadLibSwiftBot() {
 func unloadLibSwiftBot() {
     updateAndRender = nil
     dlclose(libSwiftBot)
-    dlclose(libSwiftBot) // THIS IS AWFUL. But ObjC runtimes opens all opened dylibs so you *have* to unload twice in order to get the reference count down to 0
+    dlclose(libSwiftBot) // THIS IS AWFUL. But the ObjC runtime opens all opened dylibs 
+                         // so you *have* to unload twice in order to get the reference count down to 0
     libSwiftBot = nil
 }
 
