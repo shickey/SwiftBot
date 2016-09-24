@@ -99,16 +99,10 @@ for (index, level) in levels.enumerate() {
     
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
     
-    buildExecutionQueueInBackground(level, instructions, { (executionQueue) in
+    buildExecutionQueueInBackground(level, instructions, { (executionQueue, success) in
         let mapSize = level.map.size.width
-        
-        var frame = executionQueue.first
-        while frame != nil {
-            executeFrameOnLevel(frame, level)
-            frame = frame.next
-        }
-        let (valid, _) = validateLevel(level)
-        if valid {
+
+        if success {
             print("✅MAP SIZE \(mapSize - 2): PASS")
             print("   Robot executed \(executionQueue.count) commands")
             numInstructions.append(executionQueue.count)

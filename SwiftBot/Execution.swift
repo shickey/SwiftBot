@@ -167,17 +167,24 @@ public func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> Execut
     return ExecutionResult(success: true, error: nil, sensingResult: nil)
 }
 
-public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue) -> (), _ backgroundCompletion: (() -> ())? = nil ) {
+public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue, Bool) -> (), _ backgroundCompletion: (() -> ())? = nil ) {
     
     let levelCopy = level.copy()
     let executionQueue = ExecutionQueue()
     
+    var success = true
+    
     let finish = {
+        let (valid, _) = validateLevel(levelCopy)
+        if !valid {
+            success = false
+        }
+        
         if let bc = backgroundCompletion {
             bc()
         }
         dispatch_async(dispatch_get_main_queue(), {
-            completion(executionQueue)
+            completion(executionQueue, success)
         })
         NSThread.exit()
     }
@@ -186,6 +193,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.CanGoForward)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
+            success = false
             finish()
         }
         return result.sensingResult!
@@ -195,6 +203,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.CanGoLeft)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
+            success = false
             finish()
         }
         return result.sensingResult!
@@ -204,6 +213,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.CanGoRight)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
+            success = false
             finish()
         }
         return result.sensingResult!
@@ -213,6 +223,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.GoForward)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) || !result.success {
+            success = false
             finish()
         }
     }
@@ -221,6 +232,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.TurnLeft)
         let _ = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
+            success = false
             finish()
         }
     }
@@ -229,6 +241,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.SenseCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) {
+            success = false
             finish()
         }
         return result.sensingResult!
@@ -238,6 +251,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.PlaceCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) || !result.success {
+            success = false
             finish()
         }
     }
@@ -246,6 +260,7 @@ public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> 
         let frame = ExecutionFrame(.PickupCookie)
         let result = executeFrameOnLevel(frame, levelCopy)
         if !enqueueFrame(frame, executionQueue) || !result.success {
+            success = false
             finish()
         }
     }
