@@ -57,9 +57,9 @@ public var levels : [Level] = ({
     //    boardSizes.append(currentSize + 2)
     //    print(boardSizes)
     
-    //    for i in [7, 12, 22, 42, 82, 162, 322, 642, 1282] {
-    //    for i in [7, 13, 23, 43, 83, 163, 323, 643, 1283] {
-    for i in boardSizes {
+//        for i in [7, 12, 22, 42, 82, 162, 322, 642, 1282] {
+    for i in [7, 13, 23, 43, 83, 163, 323, 643, 1283] {
+//    for i in boardSizes {
         let map = Map(size: Size(i,i))
         let level = Level(map: map, startingLocation: Point(1, i - 2))
         level.goalValidator = validator

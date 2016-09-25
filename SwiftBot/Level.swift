@@ -31,6 +31,7 @@ public class Level {
         c.cookies = cookies
         c.robot = robot
         c.options = options
+        c.goalValidator = goalValidator
         return c
     }
     

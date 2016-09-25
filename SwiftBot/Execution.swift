@@ -37,7 +37,7 @@ func functionNameForInstruction(instruction: RobotInstruction) -> String {
  * Doubly linked list implementation of program execution states
  */
 
-let MAX_QUEUE_COUNT = 10000
+let MAX_QUEUE_COUNT = 10000000
 
 public class ExecutionQueue {
     public var first : ExecutionFrame! = nil
@@ -167,107 +167,145 @@ public func executeFrameOnLevel(frame: ExecutionFrame, _ level: Level) -> Execut
     return ExecutionResult(success: true, error: nil, sensingResult: nil)
 }
 
-public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue, Bool) -> (), _ backgroundCompletion: (() -> ())? = nil ) {
+public func buildExecutionQueueInBackground(level: Level, _ instructions: () -> (), _ completion: (ExecutionQueue, Level, Bool) -> ()) {
     
     let levelCopy = level.copy()
     let executionQueue = ExecutionQueue()
     
-    var success = true
-    
     let finish = {
-        let (valid, _) = validateLevel(levelCopy)
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        var success = threadDict["success"] as! Bool
+        
+        let (valid, _) = validateLevel(level)
         if !valid {
             success = false
         }
-        
-        if let bc = backgroundCompletion {
-            bc()
-        }
         dispatch_async(dispatch_get_main_queue(), {
-            completion(executionQueue, success)
+            completion(queue, level, success)
         })
         NSThread.exit()
     }
     
     canGoForward = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.CanGoForward)
-        let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
-            success = false
+        let result = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) {
+            threadDict["success"] = false
             finish()
         }
         return result.sensingResult!
     }
     
     canGoLeft = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.CanGoLeft)
-        let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
-            success = false
+        let result = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) {
+            threadDict["success"] = false
             finish()
         }
         return result.sensingResult!
     }
     
     canGoRight = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.CanGoRight)
-        let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
-            success = false
+        let result = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) {
+            threadDict["success"] = false
             finish()
         }
         return result.sensingResult!
     }
     
     goForward = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.GoForward)
-        let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) || !result.success {
-            success = false
+        let result = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) || !result.success {
+            threadDict["success"] = false
             finish()
         }
     }
     
     turnLeft = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.TurnLeft)
-        let _ = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
-            success = false
+        let _ = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) {
+            threadDict["success"] = false
             finish()
         }
     }
     
     senseCookie = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.SenseCookie)
-        let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) {
-            success = false
+        let result = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) {
+            threadDict["success"] = false
             finish()
         }
         return result.sensingResult!
     }
     
     placeCookie = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.PlaceCookie)
-        let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) || !result.success {
-            success = false
+        let result = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) || !result.success {
+            threadDict["success"] = false
             finish()
         }
     }
     
     pickupCookie = {
+        let threadDict = NSThread.currentThread().threadDictionary
+        let level = threadDict["level"] as! Level
+        let queue = threadDict["queue"] as! ExecutionQueue
+        
         let frame = ExecutionFrame(.PickupCookie)
-        let result = executeFrameOnLevel(frame, levelCopy)
-        if !enqueueFrame(frame, executionQueue) || !result.success {
-            success = false
+        let result = executeFrameOnLevel(frame, level)
+        if !enqueueFrame(frame, queue) || !result.success {
+            threadDict["success"] = false
             finish()
         }
     }
     
     let queuer = BackgroundQueuer(instructions, finish)
     
-    NSThread.detachNewThreadSelector(Selector("buildQueue"), toTarget: queuer, withObject: nil)
+    let thread = NSThread.init(target: queuer, selector: Selector("buildQueue"), object: nil)
+    
+    let threadDict = thread.threadDictionary
+    threadDict["level"] = levelCopy
+    threadDict["queue"] = executionQueue
+    threadDict["success"] = true
+    
+    thread.start()
     
 }
 

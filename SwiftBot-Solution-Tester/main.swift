@@ -3,125 +3,107 @@ import Dispatch
 import Darwin
 
 
-func goRight() {
-    turnLeft()
-    turnLeft()
-    turnLeft()
-}
-
-
-func goLeft(){
-    turnLeft()
-    turnLeft()
-}
-
-func clean() {
-    pickupCookie()
-    goRight()
-    while canGoForward() {
-        goForward()
-        goRight()
-        pickupCookie()
-        goForward()
-        turnLeft()
-        pickupCookie()
-    }
-}
-
-func place() {
-    placeCookie()
-    while canGoForward() {
-        goForward()
-        goRight()
-        placeCookie()
-        goForward()
-        turnLeft()
-        placeCookie()
-    }
-}
-
-
-func diag2() {
-    while !senseCookie() {
-        turnLeft()
-        goForward()
-        goRight()
+func reachend(){
+    while canGoForward(){
         goForward()
     }
-    if senseCookie(){
-        pickupCookie()
-        goLeft()
-        placeCookie()
-        while canGoForward (){
-            goForward()
+}
+
+func turnright(){
+    turnLeft()
+    turnLeft()
+    turnLeft()
+}
+
+func turnaround(){
+    turnLeft()
+    turnLeft()
+}
+
+
+func spiral(){
+    
+    while canGoForward(){
+        goForward()
+        if !senseCookie(){
+            if !canGoForward(){
+                turnright()
+                goForward()
+                placeCookie()
+                goForward()
+            }
         }
-        placeCookie()
+        if senseCookie(){
+            pickupCookie()
+            turnaround()
+            goForward()
+            turnLeft()
+            goForward()
+            if !senseCookie(){
+                placeCookie()
+            }
+            else{
+                pickupCookie()
+                turnaround()
+                goForward()
+                turnLeft()
+                goForward()
+                if !senseCookie(){
+                    placeCookie()
+                }
+                else{
+                    pickupCookie()
+                    while canGoForward(){
+                        goForward()
+                        if !canGoForward(){
+                            placeCookie()
+                            turnaround()
+                            goForward()
+                            while !senseCookie(){
+                                goForward()
+                            }
+                            pickupCookie()
+                            reachend()
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 }
-
-
-
-func leftCorner() {
-    goRight()
-    while canGoForward() {
-        goForward()
-    }
-}
-
-
-
-func oneCommand() {
-    place()
-    goLeft()
-    while canGoForward() {
-        goForward()
-    }
-    goLeft()
-    diag2()
-    leftCorner()
-    clean()
-}
-
-
-
 
 var instructions = {
-    oneCommand()
+    // METHOD 3
+    
+    placeCookie()
+    goForward()
+    spiral()
+    
+    // this specific code only works on odd number squres, it is possible to make it work on even number squares as well.
 }
 
-
-
-var semaphore = dispatch_semaphore_create(1)
-
-var numInstructions : [Int] = []
+var numFinished = 0
 
 for (index, level) in levels.enumerate() {
     
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-    
-    buildExecutionQueueInBackground(level, instructions, { (executionQueue, success) in
-        let mapSize = level.map.size.width
+    buildExecutionQueueInBackground(level, instructions, { (executionQueue, finalLevel, success) in
+        let mapSize = finalLevel.map.size.width
 
         if success {
             print("✅MAP SIZE \(mapSize - 2): PASS")
             print("   Robot executed \(executionQueue.count) commands")
-            numInstructions.append(executionQueue.count)
         }
         else {
             print("❌MAP SIZE \(mapSize - 2): FAIL")
         }
         
-        if index == levels.count - 1 {
-            for num in numInstructions {
-                print(num)
-            }
+        numFinished += 1
+        if numFinished == levels.count {
             exit(0)
         }
         
-        }, {
-            dispatch_semaphore_signal(semaphore)
     })
-    
     
 }
 
